@@ -19,10 +19,10 @@ xcodebuild -project LPCounter.xcodeproj -scheme LPCounter -destination 'platform
 
 # Build the widget extension
 xcodebuild -project LPCounter.xcodeproj -scheme LPCounterWidgetExtension -destination 'platform=iOS Simulator,name=iPhone 16' build
-```
 
 # Run the unit tests (PlayerScore + CalculatorState, Swift Testing)
 xcodebuild -project LPCounter.xcodeproj -scheme LPCounter -destination 'platform=iOS Simulator,name=iPhone 18 Pro' test
+```
 
 Day-to-day work is done in Xcode (Cmd+R to run, Cmd+B to build, Cmd+U to test). There is no lint config.
 
