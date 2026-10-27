@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name" translatable="false">LPCounter</string>
+
+    <string name="lp_label" translatable="false">LP%1$d</string>
+    <string name="no_history">No history</string>
+
+    <string name="action_reset_player">Reset life points</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_halve">Halve life points</string>
+    <string name="action_reset_game">Reset game</string>
+    <string name="action_close">Close</string>
+    <string name="action_open_calculator">Edit life points</string>
+    <string name="action_clear_input">Clear input</string>
+    <string name="action_toggle_operation">Switch between add and subtract</string>
+    <string name="action_submit">Apply</string>
+    <string name="action_add">Add</string>
+    <string name="action_subtract">Subtract</string>
+
+    <string name="widget_game_name">Game</string>
+    <string name="widget_game_description">Preview of the current game</string>
+    <string name="widget_first_player_name">LPCounter Player 1</string>
+    <string name="widget_first_player_description">Add or subtract LP for Player 1</string>
+
+    <string name="channel_live_score">Live score</string>
+    <string name="live_score_title">Life points</string>
+    <string name="live_score_text" translatable="false">P1 %1$d  ·  P2 %2$d</string>
+</resources>

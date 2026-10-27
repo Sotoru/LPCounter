@@ -1,0 +1,23 @@
+<resources>
+    <string name="no_history">Nessuna cronologia</string>
+
+    <string name="action_reset_player">Azzera i punti vita</string>
+    <string name="action_undo">Annulla</string>
+    <string name="action_halve">Dimezza i punti vita</string>
+    <string name="action_reset_game">Azzera la partita</string>
+    <string name="action_close">Chiudi</string>
+    <string name="action_open_calculator">Modifica i punti vita</string>
+    <string name="action_clear_input">Cancella il valore</string>
+    <string name="action_toggle_operation">Passa tra somma e sottrazione</string>
+    <string name="action_submit">Applica</string>
+    <string name="action_add">Somma</string>
+    <string name="action_subtract">Sottrai</string>
+
+    <string name="widget_game_name">Partita</string>
+    <string name="widget_game_description">Anteprima della partita in corso</string>
+    <string name="widget_first_player_name">LPCounter Giocatore 1</string>
+    <string name="widget_first_player_description">Somma o sottrai LP al Giocatore 1</string>
+
+    <string name="channel_live_score">Punteggio live</string>
+    <string name="live_score_title">Punti vita</string>
+</resources>
