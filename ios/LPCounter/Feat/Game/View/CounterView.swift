@@ -15,9 +15,12 @@ enum CounterDirection {
 
 struct CounterView: View {
     
-    @Binding var score: PlayerScore
+    let model: GameViewModel
+    let player: Player
     @Binding var isLandscape: Bool
     let direction: CounterDirection
+
+    private var score: PlayerScore { model.score(player) }
     
     private let buttonSize = CGSize(width: 90, height: 44)
    
@@ -40,7 +43,7 @@ struct CounterView: View {
          
             HStack {
                 Button {
-                    score.reset()
+                    model.reset(player)
                 }label: {
                     Image(systemName: "clear")
                 }
@@ -54,7 +57,7 @@ struct CounterView: View {
                 .glassEffect(.regular.tint(.red).interactive())
                 
                 Button{
-                    score.undo()
+                    model.undo(player)
                 } label: {
                     Image(systemName: "arrow.counterclockwise")
                 }
@@ -70,7 +73,7 @@ struct CounterView: View {
                 
                 
                 Button{
-                    score.halve()
+                    model.halve(player)
                 } label: {
                     Image(systemName: "percent")
                 }
@@ -85,7 +88,8 @@ struct CounterView: View {
         }
         .sheet(isPresented: $isSheetPresented) {
             SheetContentView(
-                score: $score,
+                model: model,
+                player: player,
                 isPresented: $isSheetPresented,
                 isLandscape: $isLandscape
             )
@@ -97,7 +101,8 @@ struct CounterView: View {
 }
 
 private struct SheetContentView: View {
-    @Binding var score: PlayerScore
+    let model: GameViewModel
+    let player: Player
     @Binding var isPresented: Bool
     @Binding var isLandscape: Bool
     
@@ -122,19 +127,19 @@ private struct SheetContentView: View {
             .padding(.top, 8)
             
             // Contenuto della calcolatrice
-            CalculatorView(lifePoints: score.lifePoints, isLandscape: $isLandscape) { delta in
-                let before = score.lifePoints
-                score.change(by: delta)
+            CalculatorView(lifePoints: model.score(player).lifePoints, isLandscape: $isLandscape) { delta in
+                let before = model.score(player).lifePoints
+                model.changeBy(player, delta)
                 // Il foglio si chiude solo se il totale è cambiato (SPEC §3)
-                if score.lifePoints != before { isPresented = false }
+                if model.score(player).lifePoints != before { isPresented = false }
             }
         }
     }
 }
 
 #Preview {
-    @Previewable @State var score = PlayerScore()
+    @Previewable @State var model = GameViewModel(defaults: nil)
     @Previewable @State var isLandscape: Bool = false
     
-    CounterView(score: $score, isLandscape: $isLandscape, direction: .inverted)
+    CounterView(model: model, player: .one, isLandscape: $isLandscape, direction: .inverted)
 }

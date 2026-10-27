@@ -11,10 +11,10 @@ import SwiftUI
 
 
 struct GameCardProps {
-    @Binding var score: PlayerScore
+    let model: GameViewModel
+    let player: Player
     @Binding var isLandscape: Bool
     let direction: CounterDirection
-    let playerNumber: Int
 }
 
 
@@ -23,14 +23,14 @@ struct GameCardView: View {
 
     var body: some View {
         TabView {
-            CounterView(score: props.$score, isLandscape: props.$isLandscape, direction: props.direction )
-            HistoryView(history: props.score.history)
+            CounterView(model: props.model, player: props.player, isLandscape: props.$isLandscape, direction: props.direction)
+            HistoryView(history: props.model.score(props.player).history)
                 .padding(8)
         }
         #if os(iOS)
         .tabViewStyle(.page)
         #endif
-        .glassCard(playerNumber: props.playerNumber, isLandscape: props.isLandscape)
+        .glassCard(playerNumber: props.player.number, isLandscape: props.isLandscape)
     }
 }
 
@@ -47,14 +47,14 @@ private extension View {
 }
 
 #Preview {
-    @Previewable @State var score = PlayerScore()
+    @Previewable @State var model = GameViewModel(defaults: nil)
     @Previewable @State var isLandscape = false
-      
+
     let props = GameCardProps(
-        score: $score,
+        model: model,
+        player: .one,
         isLandscape: $isLandscape,
-        direction: .normal,
-        playerNumber: 1
+        direction: .normal
     )
     
     GeometryReader { geometry in

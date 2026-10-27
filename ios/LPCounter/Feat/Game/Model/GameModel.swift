@@ -66,6 +66,12 @@ nonisolated struct PlayerScore: Equatable {
     }
 }
 
+nonisolated enum Player {
+    case one, two
+
+    var number: Int { self == .one ? 1 : 2 }
+}
+
 // MARK: - Constants
 nonisolated enum GameConstants {
     static let initialLifePoints = 8000

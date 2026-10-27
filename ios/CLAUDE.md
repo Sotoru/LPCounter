@@ -20,7 +20,7 @@ xcodebuild -project LPCounter.xcodeproj -scheme LPCounter -destination 'platform
 # Build the widget extension
 xcodebuild -project LPCounter.xcodeproj -scheme LPCounterWidgetExtension -destination 'platform=iOS Simulator,name=iPhone 16' build
 
-# Run the unit tests (PlayerScore + CalculatorState, Swift Testing)
+# Run the unit tests (PlayerScore + CalculatorState + GameViewModel, Swift Testing)
 xcodebuild -project LPCounter.xcodeproj -scheme LPCounter -destination 'platform=iOS Simulator,name=iPhone 18 Pro' test
 ```
 
@@ -28,17 +28,19 @@ Day-to-day work is done in Xcode (Cmd+R to run, Cmd+B to build, Cmd+U to test). 
 
 ## Architecture
 
-**Shared state, not SwiftData.** Despite `import SwiftData`, no model container is used. The single source of truth is the App Group `group.it.sotoru.LPCounter`: life points under `lifePointsP1` / `lifePointsP2` and the history under `historyP1` / `historyP2` (signed changes, comma separated, max 200). Both the app (`GameView`) and the widget extension (`DataService`) read/write these same keys — that's how they stay in sync across process boundaries.
+**Shared state, not SwiftData.** Despite `import SwiftData`, no model container is used. The single source of truth is the App Group `group.it.sotoru.LPCounter`: life points under `lifePointsP1` / `lifePointsP2` and the history under `historyP1` / `historyP2` (signed changes, comma separated, max 200). The app (`GameViewModel`) and the widget extension (`DataService`) read/write these same keys — that's how they stay in sync across process boundaries.
 
 **Rules live in `PlayerScore`** (`Feat/Game/Model/GameModel.swift`, compiled into both targets): clamp at 0, record the change actually applied, relative undo, halve, reset. Never mutate life points or history directly; go through `PlayerScore` so the app and the widget behave the same (SPEC §2). `CalculatorState` holds the keypad rules (SPEC §3) and is app-only. Unit tests are in `LPCounterTests/`.
+
+**`GameViewModel`** (`Feat/Game/Model/GameViewModel.swift`, `@Observable`, `@MainActor`) is the iOS counterpart of Android's `GameViewModel` + `GameRepository`: it loads both players from the store, applies `PlayerScore` rules, saves, and calls `onChange` on every write. `GameView` owns it and wires `onChange` to the Live Activity and `WidgetCenter`; views below take `model` + `Player` (`.one` / `.two`) and never touch `UserDefaults`. It re-reads the store (`reload()`) when the scene becomes active, since the widget writes while the app is in the background. Tests take an injected `UserDefaults`.
 
 **Two targets:**
 - `LPCounter` — the app. Entry `App/LPCounterApp.swift` → `ContentView` → `GameView`. Feature code lives under `LPCounter/Feat/Game/` (Model/View split).
 - `LPCounterWidgetExtension` — under `Extensions/LPCounterWidget/`. Contains the Live Activity, a `GameWidget`, and `FirstPlayerWidget`. Interactive widget buttons fire `HandleGameIntent` (AppKit `AppIntent`), which mutates the shared store via `DataService.handleLifePoints`.
 
-**Keeping widgets & Live Activity fresh.** When LP change in the app, `GameView.onChange` calls `LiveActivityManager.shared.updateActivity(...)` and reloads every widget kind via `WidgetCenter`. The widget kinds are centralized in `GameConstants.widgetKinds` — keep that list in sync with the actual widget `kind` strings (currently `GameWidget`, `FirstPlayerWidget`, `FirstPlayerLargeWidget`). The `AppIntent` path reloads the same kinds after mutating state.
+**Keeping widgets & Live Activity fresh.** When LP change in the app, `GameViewModel`'s `onChange` (set in `GameView`) calls `LiveActivityManager.shared.updateActivity(...)` and reloads every widget kind via `WidgetCenter`. The widget kinds are centralized in `GameConstants.widgetKinds` — keep that list in sync with the actual widget `kind` strings (currently `GameWidget`, `FirstPlayerWidget`, `FirstPlayerLargeWidget`). The `AppIntent` path reloads the same kinds after mutating state.
 
-**The `Game` class is only a transport for the Live Activity.** `GameView` builds a throwaway `Game` from the AppStorage values to feed `LiveActivityManager`; it is not the app's state.
+**The `Game` class is only a transport for the Live Activity.** `GameView` builds a throwaway `Game` from the view model's totals to feed `LiveActivityManager`; it is not the app's state.
 
 **Orientation.** `GameView` adapts portrait/landscape by swapping `VStackLayout`/`HStackLayout` via the custom `.detectDeviceOrientation(isLandscape:)` modifier (`Utils/OrientationManager.swift`). Landscape rotates the second player's card so two players face each other across the device.
 

@@ -11,28 +11,17 @@ import WidgetKit
 
 
 struct GameView: View {
-    // MARK: - State & Storage
-    @AppStorage(GameConstants.lifePointsP1Key, store: UserDefaults(suiteName: GameConstants.appGroup))
-    private var lifePointsP1: Int = GameConstants.initialLifePoints
-
-    @AppStorage(GameConstants.lifePointsP2Key, store: UserDefaults(suiteName: GameConstants.appGroup))
-    private var lifePointsP2: Int = GameConstants.initialLifePoints
-    
-    @AppStorage(GameConstants.historyP1Key, store: UserDefaults(suiteName: GameConstants.appGroup))
-    private var historyP1: String = ""
-
-    @AppStorage(GameConstants.historyP2Key, store: UserDefaults(suiteName: GameConstants.appGroup))
-    private var historyP2: String = ""
-
+    @State private var model = GameViewModel(onChange: GameView.sync)
+    @Environment(\.scenePhase) private var scenePhase
     @Binding var isLandscape: Bool
-    
+
     // MARK: - Gradients
     private static let backgroundGradient = LinearGradient(
         gradient: Gradient(colors: [Color.red.opacity(0.4), Color.blue.opacity(0.4)]),
         startPoint: .top,
         endPoint: .bottom
     )
-    
+
     var body: some View {
         ZStack {
             countersStack()
@@ -42,28 +31,26 @@ struct GameView: View {
         .onAppear {
             #if os(iOS)
             UIApplication.shared.isIdleTimerDisabled = true
-            let game = Game(firstPlayerLp: lifePointsP1, secondPlayerLp: lifePointsP2)
-            LiveActivityManager.shared.startActivity(game: game)
+            LiveActivityManager.shared.startActivity(game: Game(firstPlayerLp: model.p1.lifePoints, secondPlayerLp: model.p2.lifePoints))
             #endif
         }
-        .onChange(of: lifePointsP1) {
-            #if os(iOS)
-            let game = Game(firstPlayerLp: lifePointsP1, secondPlayerLp: lifePointsP2)
-            LiveActivityManager.shared.updateActivity(game: game)
-            #endif
-            reloadWidgets()
-        }
-        .onChange(of: lifePointsP2) {
-            #if os(iOS)
-            let game = Game(firstPlayerLp: lifePointsP1, secondPlayerLp: lifePointsP2)
-            LiveActivityManager.shared.updateActivity(game: game)
-            #endif
-            reloadWidgets()
+        .onChange(of: scenePhase) {
+            if scenePhase == .active { model.reload() }
         }
         .onDisappear {
             #if os(iOS)
             UIApplication.shared.isIdleTimerDisabled = false
             #endif
+        }
+    }
+
+    // Widgets and the Live Activity live outside the app UI, so they are pushed on every change.
+    private static func sync(_ p1: PlayerScore, _ p2: PlayerScore) {
+        #if os(iOS)
+        LiveActivityManager.shared.updateActivity(game: Game(firstPlayerLp: p1.lifePoints, secondPlayerLp: p2.lifePoints))
+        #endif
+        for kind in GameConstants.widgetKinds {
+            WidgetCenter.shared.reloadTimelines(ofKind: kind)
         }
     }
 }
@@ -74,29 +61,14 @@ private extension GameView {
     func countersStack() -> some View {
         let stackLayout: AnyLayout = isLandscape ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
         stackLayout {
-            GameCardView(props: GameCardProps(score: scoreP2, isLandscape: $isLandscape, direction: .inverted,playerNumber: 2))
-            GameCardView(props: GameCardProps(score: scoreP1, isLandscape: $isLandscape, direction: .normal,playerNumber: 1))
+            GameCardView(props: GameCardProps(model: model, player: .two, isLandscape: $isLandscape, direction: .inverted))
+            GameCardView(props: GameCardProps(model: model, player: .one, isLandscape: $isLandscape, direction: .normal))
         }
     }
 
-    // Life points and history live in the shared store as separate keys; the rules live in PlayerScore.
-    var scoreP1: Binding<PlayerScore> {
-        Binding(
-            get: { PlayerScore(lifePoints: lifePointsP1, historyRaw: historyP1) },
-            set: { lifePointsP1 = $0.lifePoints; historyP1 = $0.historyRaw }
-        )
-    }
-
-    var scoreP2: Binding<PlayerScore> {
-        Binding(
-            get: { PlayerScore(lifePoints: lifePointsP2, historyRaw: historyP2) },
-            set: { lifePointsP2 = $0.lifePoints; historyP2 = $0.historyRaw }
-        )
-    }
-    
     @ViewBuilder
     func resetButton() -> some View {
-        Button(action: resetLifePoints) {
+        Button(action: model.resetGame) {
             Image(systemName: "arrow.counterclockwise.circle.fill")
                 .font(.system(size: 44, weight: .bold))
                 .foregroundStyle(.white)
@@ -109,26 +81,6 @@ private extension GameView {
         .rotationEffect(.degrees(isLandscape ? 270 : 0))
     }
 }
-
-// MARK: - Actions
-private extension GameView {
-    // Resets the totals only; the history is intentionally left untouched (SPEC §2).
-    func resetLifePoints() {
-        lifePointsP1 = GameConstants.initialLifePoints
-        lifePointsP2 = GameConstants.initialLifePoints
-        reloadWidgets()
-    }
-    
-    func reloadWidgets() {
-        Task {
-            for kind in GameConstants.widgetKinds {
-                WidgetCenter.shared.reloadTimelines(ofKind: kind)
-            }
-        }
-    }
-}
-
-
 
 // MARK: - Previews
 #Preview("Portrait Light",traits: .portrait) { GameView(isLandscape: .constant(false)
