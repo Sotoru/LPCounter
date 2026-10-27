@@ -1,0 +1,86 @@
+{
+  "sourceLanguage": "en",
+  "version": "1.0",
+  "strings": {
+    "Game": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partita"
+          }
+        }
+      }
+    },
+    "Preview of the current game": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anteprima della partita in corso"
+          }
+        }
+      }
+    },
+    "LPCounter Player 1": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LPCounter Giocatore 1"
+          }
+        }
+      }
+    },
+    "Add or subtract LP for Player 1": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somma o sottrai LP al Giocatore 1"
+          }
+        }
+      }
+    },
+    "Add": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somma"
+          }
+        }
+      }
+    },
+    "Subtract": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sottrai"
+          }
+        }
+      }
+    },
+    "Player 1": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giocatore 1"
+          }
+        }
+      }
+    },
+    "Player 2": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giocatore 2"
+          }
+        }
+      }
+    }
+  }
+}

@@ -101,6 +101,7 @@ private extension CalculatorView {
                 } label: {
                     Image(systemName: "delete.left")
                 }
+                .accessibilityLabel("Clear input")
                 .buttonStyle(CalculatorButtonStyle(size: btnSize))
                 .frame(maxWidth: .infinity, alignment: .center)
             }
@@ -123,6 +124,7 @@ private extension CalculatorView {
             } label: {
                 Image(systemName: "plus.forwardslash.minus")
             }
+            .accessibilityLabel("Switch between add and subtract")
             .buttonStyle(CalculatorButtonStyle(size: btnSize))
             
             Button("0") {
@@ -136,6 +138,7 @@ private extension CalculatorView {
             } label: {
                 Image(systemName: "arrow.right")
             }
+            .accessibilityLabel("Apply")
             .buttonStyle(CalculatorButtonStyle(size: btnSize, customColor: .orange))
         }
     }

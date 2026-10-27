@@ -20,7 +20,7 @@ struct GameWidget: Widget {
         #if os(iOS)
         .supportedMountingStyles([.elevated])
         #endif
-        .configurationDisplayName("Game widget")
-        .description("Anteprima game")
+        .configurationDisplayName("Game")
+        .description("Preview of the current game")
     }
 }

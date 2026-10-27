@@ -102,6 +102,7 @@ private extension GameView {
                 .foregroundStyle(.white)
                 .padding(16)
         }
+        .accessibilityLabel("Reset game")
         .glassEffect(.regular.tint(.blue).interactive())
         .clipShape(Circle())
         .shadow(radius: 8)

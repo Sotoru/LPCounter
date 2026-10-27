@@ -29,8 +29,8 @@ struct FirstPlayerWidget: Widget {
         #else
         .supportedFamilies([.systemSmall, .systemLarge])
         #endif
-        .configurationDisplayName("LifePointCounter Player1")
-        .description("Widget per aggiungere o sottrare LP al P1")
+        .configurationDisplayName("LPCounter Player 1")
+        .description("Add or subtract LP for Player 1")
         
         
     }

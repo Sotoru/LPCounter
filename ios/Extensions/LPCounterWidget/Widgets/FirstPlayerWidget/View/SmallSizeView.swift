@@ -31,11 +31,13 @@ struct SmallSizeView: View {
                     Text("-")
                         .font(.title)
                 }
+                .accessibilityLabel("Subtract")
                 
                 Button(intent: HandleGameIntent()) {
                     Text("+")
                         .font(.title)
                 }
+                .accessibilityLabel("Add")
             }
         }
     }

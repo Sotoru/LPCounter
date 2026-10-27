@@ -48,6 +48,10 @@ Day-to-day work is done in Xcode (Cmd+R to run, Cmd+B to build, Cmd+U to test). 
 
 `GameConstants` in `LPCounter/Feat/Game/Model/GameModel.swift` holds `appGroup`, `initialLifePoints` (8000), and `widgetKinds`. The App Group string is also hardcoded in `DataService.swift` — if it ever changes, update both.
 
+## Localization
+
+String catalogs, `en` source + `it`: `LPCounter/Resources/Localizable.xcstrings` (app) and `Extensions/LPCounterWidget/Resources/Localizable.xcstrings` (widgets, Live Activity). Keys are the English strings; the Italian copy matches `android/.../values-it/strings.xml`. The widget catalog is listed in the `LPCounterWidgetExtension` membership exceptions in `project.pbxproj` (target has no synchronized group of its own) and excluded from the app target, otherwise Xcode errors on two catalogs in one target.
+
 ## Docs
 
 Human-facing documentation goes in `Docs/`.

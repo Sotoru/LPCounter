@@ -34,6 +34,9 @@ struct CounterView: View {
                 .onTapGesture {
                     isSheetPresented.toggle()
                 }
+                .accessibilityLabel("Edit life points")
+                .accessibilityValue(String(score.lifePoints))
+                .accessibilityAddTraits(.isButton)
          
             HStack {
                 Button {
@@ -41,6 +44,7 @@ struct CounterView: View {
                 }label: {
                     Image(systemName: "clear")
                 }
+                .accessibilityLabel("Reset life points")
                 .disabled(isAtInitialLifePoints)
                 .opacity(isAtInitialLifePoints ? 0.4 : 1)
                 .animation(.easeInOut(duration: 0.2), value: isAtInitialLifePoints)
@@ -54,6 +58,7 @@ struct CounterView: View {
                 } label: {
                     Image(systemName: "arrow.counterclockwise")
                 }
+                .accessibilityLabel("Undo")
                 .font(.title)
                 .disabled(score.history.isEmpty)
                 .opacity(score.history.isEmpty ? 0.4 : 1)
@@ -69,6 +74,7 @@ struct CounterView: View {
                 } label: {
                     Image(systemName: "percent")
                 }
+                .accessibilityLabel("Halve life points")
                 .font(.title)
                 .frame(width: buttonSize.width, height: buttonSize.height)
                 .foregroundStyle(.white)
@@ -109,6 +115,7 @@ private struct SheetContentView: View {
                         .contentShape(Rectangle())
                     
                 }
+                .accessibilityLabel("Close")
                 .glassEffect()
             }
             .padding(.horizontal)

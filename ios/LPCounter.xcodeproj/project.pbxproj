@@ -64,6 +64,7 @@
 			membershipExceptions = (
 				LPCounterWidget/LPCounterWidgetBundle.swift,
 				LPCounterWidget/Resources/Info.plist,
+				LPCounterWidget/Resources/Localizable.xcstrings,
 				LPCounterWidget/Widgets/FirstPlayerWidget/FirstPlayerWidget.swift,
 				LPCounterWidget/Widgets/FirstPlayerWidget/Provider/FirstPlayerWidgetProvider.swift,
 				LPCounterWidget/Widgets/FirstPlayerWidget/View/LargeSizeView.swift,
@@ -85,6 +86,7 @@
 				LPCounterWidget/Activities/GameLiveAttributes.swift,
 				LPCounterWidget/Activities/View/GameLiveActivityView.swift,
 				LPCounterWidget/LPCounterWidgetBundle.swift,
+				LPCounterWidget/Resources/Localizable.xcstrings,
 				LPCounterWidget/Widgets/FirstPlayerWidget/FirstPlayerWidget.swift,
 				LPCounterWidget/Widgets/FirstPlayerWidget/Provider/FirstPlayerWidgetProvider.swift,
 				LPCounterWidget/Widgets/FirstPlayerWidget/View/LargeSizeView.swift,
@@ -299,6 +301,7 @@
 			knownRegions = (
 				en,
 				Base,
+				it,
 			);
 			mainGroup = 6AAED5362EB2845B00F16F46;
 			minimizedProjectReferenceProxies = 1;
