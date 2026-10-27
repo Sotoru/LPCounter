@@ -21,3 +21,9 @@ When changing behaviour or UI:
 
 Single `main` flow. Commit prefixes: `spec:`, `ios:`, `android:`; a feature touching both sides can use `feat:` and
 should still land spec + both apps together. Platform build artifacts are ignored by each platform's own `.gitignore`.
+
+## Tasks
+
+The task list lives in Notion, not in the repo: page "LPCounter" under Personale / Progetti
+(https://app.notion.com/p/3fe3da5e7bfd811180b5e9b9c6303c2f). Read it with the Notion MCP before choosing what to work on,
+and update it (check off / add items) when a task is done or discovered.
