@@ -89,15 +89,14 @@ Esempi (da replicare nei test di entrambe le app), partendo da 8000:
 | Widget | WidgetKit + App Intents | Glance |
 | Punteggio live | Live Activity | Notifica ongoing |
 | Persistenza | App Group `UserDefaults` | Jetpack DataStore |
-| Lingue | en | en, it |
+| Lingue | en, it | en, it |
 
 Aspetto, colori e animazioni seguono il sistema; non vanno imitati tra piattaforme.
 
 ## Divergenze da chiudere
 
 Android è il riferimento (§2). iOS è allineato a §1–§6 (stesse regole in `PlayerScore` e `CalculatorState`, stessi
-esempi di §3 nei test di entrambe le app). Restano:
+esempi di §3 nei test di entrambe le app, stesse lingue `en` e `it`). Resta:
 
-1. ℹ️ **Lingue:** Android ha `en` e `it`; iOS solo `en`.
-2. ℹ️ **Dati preesistenti:** su iOS, una history salvata prima dell'allineamento non esiste (era solo in memoria), quindi
+1. ℹ️ **Dati preesistenti:** su iOS, una history salvata prima dell'allineamento non esiste (era solo in memoria), quindi
    non serve migrazione. I totali restano nelle stesse chiavi.
