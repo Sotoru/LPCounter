@@ -18,6 +18,12 @@ struct GameView: View {
     @AppStorage(GameConstants.lifePointsP2Key, store: UserDefaults(suiteName: GameConstants.appGroup))
     private var lifePointsP2: Int = GameConstants.initialLifePoints
     
+    @AppStorage(GameConstants.historyP1Key, store: UserDefaults(suiteName: GameConstants.appGroup))
+    private var historyP1: String = ""
+
+    @AppStorage(GameConstants.historyP2Key, store: UserDefaults(suiteName: GameConstants.appGroup))
+    private var historyP2: String = ""
+
     @Binding var isLandscape: Bool
     
     // MARK: - Gradients
@@ -68,9 +74,24 @@ private extension GameView {
     func countersStack() -> some View {
         let stackLayout: AnyLayout = isLandscape ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
         stackLayout {
-            GameCardView(props: GameCardProps(lifePoints: $lifePointsP2, isLandscape: $isLandscape, direction: .inverted,playerNumber: 2))
-            GameCardView(props: GameCardProps(lifePoints: $lifePointsP1, isLandscape: $isLandscape, direction: .normal,playerNumber: 1))
+            GameCardView(props: GameCardProps(score: scoreP2, isLandscape: $isLandscape, direction: .inverted,playerNumber: 2))
+            GameCardView(props: GameCardProps(score: scoreP1, isLandscape: $isLandscape, direction: .normal,playerNumber: 1))
         }
+    }
+
+    // Life points and history live in the shared store as separate keys; the rules live in PlayerScore.
+    var scoreP1: Binding<PlayerScore> {
+        Binding(
+            get: { PlayerScore(lifePoints: lifePointsP1, historyRaw: historyP1) },
+            set: { lifePointsP1 = $0.lifePoints; historyP1 = $0.historyRaw }
+        )
+    }
+
+    var scoreP2: Binding<PlayerScore> {
+        Binding(
+            get: { PlayerScore(lifePoints: lifePointsP2, historyRaw: historyP2) },
+            set: { lifePointsP2 = $0.lifePoints; historyP2 = $0.historyRaw }
+        )
     }
     
     @ViewBuilder
@@ -90,6 +111,7 @@ private extension GameView {
 
 // MARK: - Actions
 private extension GameView {
+    // Resets the totals only; the history is intentionally left untouched (SPEC §2).
     func resetLifePoints() {
         lifePointsP1 = GameConstants.initialLifePoints
         lifePointsP2 = GameConstants.initialLifePoints

@@ -8,17 +8,13 @@
 import SwiftUI
 
 
-enum CalculatorOperation {
-    case increase
-    case decrease
-}
-
 struct CalculatorView: View {
     
-    @Binding var lifePoints: Int
+    let lifePoints: Int
     @Binding var isLandscape: Bool
-    @State private var numberInput: Int = 0
-    @State private var operation: CalculatorOperation = .decrease
+    /// Receives the signed change to apply.
+    let onApply: (Int) -> Void
+    @State private var calc = CalculatorState()
     
     private let btnSize: CGFloat = 80
     
@@ -74,7 +70,7 @@ private extension CalculatorView {
             GridRow {
                 // Colonna 1: simbolo operazione
                 Group {
-                    switch operation {
+                    switch calc.operation {
                     case .increase: Text("+")
                     case .decrease: Text("-")
                     }
@@ -85,8 +81,8 @@ private extension CalculatorView {
                 
                 // Colonna 2: valore autocompletato o placeholder
                 Group {
-                    if numberInput != 0 {
-                        Text(String(autocompletedValue))
+                    if calc.input != 0 {
+                        Text(String(calc.value))
                             .font(.system(.title, design: .monospaced))
                             .fontWeight(.regular)
                             .foregroundStyle(.secondary)
@@ -101,7 +97,7 @@ private extension CalculatorView {
                 
                 // Colonna 3: pulsante clear
                 Button {
-                    clearInput()
+                    calc.clear()
                 } label: {
                     Image(systemName: "delete.left")
                 }
@@ -109,7 +105,7 @@ private extension CalculatorView {
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }
-        .animation(.easeInOut(duration: 0.15), value: numberInput)
+        .animation(.easeInOut(duration: 0.15), value: calc.input)
     }
     
     @ViewBuilder
@@ -117,96 +113,32 @@ private extension CalculatorView {
         LazyVGrid(columns: Array(repeating: .init(.flexible()), count: columns), spacing: 16) {
             ForEach(1...9, id: \.self) { number in
                 Button("\(number)") {
-                    appendDigit(number)
+                    calc.append(number)
                 }
                 .buttonStyle(CalculatorButtonStyle(size: btnSize))
             }
             
             Button {
-                operation = operation == .increase ? .decrease : .increase
+                calc.toggleOperation()
             } label: {
                 Image(systemName: "plus.forwardslash.minus")
             }
             .buttonStyle(CalculatorButtonStyle(size: btnSize))
             
             Button("0") {
-                appendDigit(0)
+                calc.append(0)
             }
             .buttonStyle(CalculatorButtonStyle(size: btnSize))
             
             Button {
-                submitValue()
+                onApply(calc.delta)
+                calc.clear()
             } label: {
                 Image(systemName: "arrow.right")
             }
             .buttonStyle(CalculatorButtonStyle(size: btnSize, customColor: .orange))
         }
     }
-    
-    // MARK: - Actions
-    
-    // Aggiunge una cifra rispettando:
-    // - nessuno 0 iniziale
-    // - massimo 4 cifre effettive
-    private func appendDigit(_ digit: Int) {
-        // Evita 0 come prima cifra
-        if numberInput == 0 && digit == 0 { return }
-        
-        // Conta le cifre correnti
-        let currentDigits = digitsCount(of: numberInput)
-        if currentDigits >= 4 { return } // massimo 4 cifre
-        
-        numberInput = numberInput == 0 ? digit : numberInput * 10 + digit
-    }
-    
-    private func clearInput() {
-        numberInput = 0
-    }
-    
-    // Valore autocompletato in base alle regole:
-    // - 1 cifra  -> * 1000
-    // - 2 cifre -> * 100
-    // - 3+ cifre -> così com'è
-    private var autocompletedValue: Int {
-        let digitsCount = digitsCount(of: numberInput)
-        switch digitsCount {
-        case 0:
-            return 0
-        case 1:
-            return numberInput * 100
-        case 2:
-            return numberInput * 100
-        default:
-            return numberInput
-        }
-    }
-    
-    private func submitValue() {
-        
-        var newLifePoints = lifePoints
-        
-        if(operation == .decrease) {
-            newLifePoints -= autocompletedValue
-        }
-        else {
-            newLifePoints += autocompletedValue
-        }
-        
-        if newLifePoints >= 0 {
-            lifePoints = newLifePoints
-        } else {
-            lifePoints = 0
-        }
-        numberInput = 0
-    }
-    
-    // MARK: - Helpers
-    
-    private func digitsCount(of value: Int) -> Int {
-        if value == 0 { return 0 }
-        return Int(floor(log10(Double(value)))) + 1
-    }
-    
 }
 
 // Stile riutilizzabile per i pulsanti della calcolatrice
@@ -229,22 +161,19 @@ private struct CalculatorButtonStyle: ButtonStyle {
 
 // Preview dinamica
 #Preview("Portrait",traits: .portrait) {
-    @Previewable @State var lp: Int = 8000
     @Previewable @State var isLandscape: Bool = false
-    CalculatorView(lifePoints: $lp, isLandscape: $isLandscape)
+    CalculatorView(lifePoints: 8000, isLandscape: $isLandscape, onApply: { _ in })
 }
 
 #Preview("Portrait Dark",traits: .portrait) {
-    @Previewable @State var lp: Int = 8000
     @Previewable @State var isLandscape: Bool = false
-    CalculatorView(lifePoints: $lp, isLandscape: $isLandscape)
+    CalculatorView(lifePoints: 8000, isLandscape: $isLandscape, onApply: { _ in })
         .preferredColorScheme(.dark)
 }
 
 
 #Preview("Landscape",traits: .landscapeLeft) {
-    @Previewable @State var lp: Int = 8000
     @Previewable @State var isLandscape: Bool = true
-    CalculatorView(lifePoints: $lp, isLandscape: $isLandscape)
+    CalculatorView(lifePoints: 8000, isLandscape: $isLandscape, onApply: { _ in })
 }
 

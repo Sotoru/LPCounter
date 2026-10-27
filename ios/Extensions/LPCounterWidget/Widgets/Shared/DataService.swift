@@ -6,44 +6,32 @@
 //
 
 import Foundation
-import SwiftUI
 
+/// Reads and writes the shared App Group store with the same rules as the app (`PlayerScore`),
+/// so widget changes are clamped, recorded in the history and undoable from the app.
 struct DataService {
-    @AppStorage(GameConstants.lifePointsP1Key, store: UserDefaults(suiteName: GameConstants.appGroup)) private var lifePointsP1: Int = GameConstants.initialLifePoints
-    @AppStorage(GameConstants.lifePointsP2Key, store: UserDefaults(suiteName: GameConstants.appGroup)) private var lifePointsP2: Int = GameConstants.initialLifePoints
-    
-    
-    //    func addLpP1(lp: Int, isPlayer1: Bool?) {
-    //        lifePointsP1 += lp
-    //    }
-    //
-    //    func subtractLpP1(lp: Int) {
-    //        lifePointsP1 -= lp
-    //    }
-    //
-    //
-    //    func addLpP2() {
-    //        lifePointsP2 += 1000
-    //    }
-    
-    func handleLifePoints(lp: Int, isSubtract: Bool?, isFirstPlayer: Bool?) {
-        let subtract = isSubtract ?? false
-        let isP1 = isFirstPlayer ?? true
-        let delta = subtract ? -lp : lp
+    private let defaults = UserDefaults(suiteName: GameConstants.appGroup)
 
-        if isP1 {
-            lifePointsP1 += delta
-        } else {
-            lifePointsP2 += delta
-        }
+    func handleLifePoints(lp: Int, isSubtract: Bool?, isFirstPlayer: Bool?) {
+        let delta = (isSubtract ?? false) ? -lp : lp
+        let isP1 = isFirstPlayer ?? true
+
+        var score = score(isFirstPlayer: isP1)
+        score.change(by: delta)
+        defaults?.set(score.lifePoints, forKey: isP1 ? GameConstants.lifePointsP1Key : GameConstants.lifePointsP2Key)
+        defaults?.set(score.historyRaw, forKey: isP1 ? GameConstants.historyP1Key : GameConstants.historyP2Key)
     }
-    
-    func progressP1()-> Int {
-        return lifePointsP1
+
+    func progressP1() -> Int { score(isFirstPlayer: true).lifePoints }
+
+    func progressP2() -> Int { score(isFirstPlayer: false).lifePoints }
+
+    private func score(isFirstPlayer: Bool) -> PlayerScore {
+        let lifeKey = isFirstPlayer ? GameConstants.lifePointsP1Key : GameConstants.lifePointsP2Key
+        let historyKey = isFirstPlayer ? GameConstants.historyP1Key : GameConstants.historyP2Key
+        return PlayerScore(
+            lifePoints: defaults?.object(forKey: lifeKey) as? Int ?? GameConstants.initialLifePoints,
+            historyRaw: defaults?.string(forKey: historyKey) ?? ""
+        )
     }
-    
-    func progressP2()-> Int {
-        return lifePointsP2
-    }
-    
 }

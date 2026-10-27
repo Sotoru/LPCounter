@@ -11,7 +11,7 @@ import SwiftUI
 
 
 struct GameCardProps {
-    @Binding var lifePoints: Int
+    @Binding var score: PlayerScore
     @Binding var isLandscape: Bool
     let direction: CounterDirection
     let playerNumber: Int
@@ -20,12 +20,11 @@ struct GameCardProps {
 
 struct GameCardView: View {
     let props: GameCardProps
-    @State private var history: [Int] = []
 
     var body: some View {
         TabView {
-            CounterView(lifePoints: props.$lifePoints, isLandscape: props.$isLandscape, history: $history, direction: props.direction )
-            HistoryView(history: $history)
+            CounterView(score: props.$score, isLandscape: props.$isLandscape, direction: props.direction )
+            HistoryView(history: props.score.history)
                 .padding(8)
         }
         #if os(iOS)
@@ -48,11 +47,11 @@ private extension View {
 }
 
 #Preview {
-    @Previewable @State var lifePoints = 8000
+    @Previewable @State var score = PlayerScore()
     @Previewable @State var isLandscape = false
       
     let props = GameCardProps(
-        lifePoints: $lifePoints,
+        score: $score,
         isLandscape: $isLandscape,
         direction: .normal,
         playerNumber: 1

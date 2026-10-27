@@ -15,7 +15,7 @@ cross-platform layer and never one platform imitating the other's look.
 When changing behaviour or UI:
 1. Update `SPEC.md` first (rules, examples, component table).
 2. Implement it in **both** `ios/` and `android/`, or record the gap in `SPEC.md` → "Divergenze da chiudere".
-3. Keep the numeric examples in `SPEC.md` §3 covered by tests on each platform.
+3. Keep the numeric examples in `SPEC.md` §3 covered by tests on each platform (`android/` JVM tests, `ios/LPCounterTests`).
 
 ## Git
 

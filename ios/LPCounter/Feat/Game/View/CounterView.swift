@@ -15,19 +15,20 @@ enum CounterDirection {
 
 struct CounterView: View {
     
-    @Binding var lifePoints: Int
+    @Binding var score: PlayerScore
     @Binding var isLandscape: Bool
-    @Binding var history: [Int]
     let direction: CounterDirection
     
     private let buttonSize = CGSize(width: 90, height: 44)
    
     @State private var isSheetPresented = false
+
+    private var isAtInitialLifePoints: Bool { score.lifePoints == GameConstants.initialLifePoints }
     
     var body: some View {
         VStack{
             
-            Text(String(lifePoints))
+            Text(String(score.lifePoints))
                 .font(.system(size: 100))
                 .padding(.bottom,24)
                 .onTapGesture {
@@ -36,32 +37,27 @@ struct CounterView: View {
          
             HStack {
                 Button {
-                    lifePoints = GameConstants.initialLifePoints
-                    history.removeAll()
+                    score.reset()
                 }label: {
                     Image(systemName: "clear")
                 }
-                .disabled(lifePoints == 8000)
-                .opacity(lifePoints == 8000 ? 0.4 : 1)
-                .animation(.easeInOut(duration: 0.2), value: lifePoints == 8000)
+                .disabled(isAtInitialLifePoints)
+                .opacity(isAtInitialLifePoints ? 0.4 : 1)
+                .animation(.easeInOut(duration: 0.2), value: isAtInitialLifePoints)
                 .font(.title)
                 .frame(width: buttonSize.width, height: buttonSize.height)
                 .foregroundStyle(.white)
                 .glassEffect(.regular.tint(.red).interactive())
                 
                 Button{
-                    if(!history.isEmpty){
-                        history.removeLast()
-                    }
-                    lifePoints = history.last ?? 8000
-                    
+                    score.undo()
                 } label: {
                     Image(systemName: "arrow.counterclockwise")
                 }
                 .font(.title)
-                .disabled(history.isEmpty)
-                .opacity(history.isEmpty ? 0.4 : 1)
-                .saturation(history.isEmpty ? 0 : 1)
+                .disabled(score.history.isEmpty)
+                .opacity(score.history.isEmpty ? 0.4 : 1)
+                .saturation(score.history.isEmpty ? 0 : 1)
                 .frame(width: buttonSize.width, height: buttonSize.height)
                 .foregroundStyle(.white)
                 .glassEffect(.regular.tint(.gray).interactive())
@@ -69,9 +65,7 @@ struct CounterView: View {
                 
                 
                 Button{
-                    let _lpHalfed = lifePoints / 2
-                    lifePoints = _lpHalfed
-                    history.append(_lpHalfed)
+                    score.halve()
                 } label: {
                     Image(systemName: "percent")
                 }
@@ -85,9 +79,8 @@ struct CounterView: View {
         }
         .sheet(isPresented: $isSheetPresented) {
             SheetContentView(
-                lifePoints: $lifePoints,
+                score: $score,
                 isPresented: $isSheetPresented,
-                lpHistory: $history,
                 isLandscape: $isLandscape
             )
             .rotationEffect(.degrees(direction == .inverted && !isLandscape ? 180 : 0))
@@ -98,9 +91,8 @@ struct CounterView: View {
 }
 
 private struct SheetContentView: View {
-    @Binding var lifePoints: Int
+    @Binding var score: PlayerScore
     @Binding var isPresented: Bool
-    @Binding var lpHistory: [Int]
     @Binding var isLandscape: Bool
     
     var body: some View {
@@ -123,21 +115,19 @@ private struct SheetContentView: View {
             .padding(.top, 8)
             
             // Contenuto della calcolatrice
-            CalculatorView(lifePoints: $lifePoints, isLandscape: $isLandscape)
-                .onChange(of: lifePoints) { _, newLp in
-                    // registra in history il nuovo totale assoluto (coerente con l'undo)
-                    lpHistory.append(newLp)
-                    // chiudi la modale ad ogni cambio
-                    isPresented = false
-                }
+            CalculatorView(lifePoints: score.lifePoints, isLandscape: $isLandscape) { delta in
+                let before = score.lifePoints
+                score.change(by: delta)
+                // Il foglio si chiude solo se il totale è cambiato (SPEC §3)
+                if score.lifePoints != before { isPresented = false }
+            }
         }
     }
 }
 
 #Preview {
-    @Previewable @State var lp: Int = 8000
+    @Previewable @State var score = PlayerScore()
     @Previewable @State var isLandscape: Bool = false
-    @Previewable @State var history: [Int] = []
     
-    CounterView(lifePoints: $lp, isLandscape: $isLandscape, history: $history, direction: .inverted)
+    CounterView(score: $score, isLandscape: $isLandscape, direction: .inverted)
 }

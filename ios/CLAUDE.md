@@ -21,11 +21,16 @@ xcodebuild -project LPCounter.xcodeproj -scheme LPCounter -destination 'platform
 xcodebuild -project LPCounter.xcodeproj -scheme LPCounterWidgetExtension -destination 'platform=iOS Simulator,name=iPhone 16' build
 ```
 
-Day-to-day work is done in Xcode (Cmd+R to run, Cmd+B to build). There is no test target and no lint config.
+# Run the unit tests (PlayerScore + CalculatorState, Swift Testing)
+xcodebuild -project LPCounter.xcodeproj -scheme LPCounter -destination 'platform=iOS Simulator,name=iPhone 18 Pro' test
+
+Day-to-day work is done in Xcode (Cmd+R to run, Cmd+B to build, Cmd+U to test). There is no lint config.
 
 ## Architecture
 
-**Shared state, not SwiftData.** Despite `import SwiftData`, no model container is used. The single source of truth for life points is `@AppStorage` backed by the App Group `group.it.sotoru.LPCounter`, keys `lifePointsP1` / `lifePointsP2`. Both the app (`GameView`) and the widget extension (`DataService`) read/write these same keys — that's how they stay in sync across process boundaries. Any code touching life points must go through this App Group store.
+**Shared state, not SwiftData.** Despite `import SwiftData`, no model container is used. The single source of truth is the App Group `group.it.sotoru.LPCounter`: life points under `lifePointsP1` / `lifePointsP2` and the history under `historyP1` / `historyP2` (signed changes, comma separated, max 200). Both the app (`GameView`) and the widget extension (`DataService`) read/write these same keys — that's how they stay in sync across process boundaries.
+
+**Rules live in `PlayerScore`** (`Feat/Game/Model/GameModel.swift`, compiled into both targets): clamp at 0, record the change actually applied, relative undo, halve, reset. Never mutate life points or history directly; go through `PlayerScore` so the app and the widget behave the same (SPEC §2). `CalculatorState` holds the keypad rules (SPEC §3) and is app-only. Unit tests are in `LPCounterTests/`.
 
 **Two targets:**
 - `LPCounter` — the app. Entry `App/LPCounterApp.swift` → `ContentView` → `GameView`. Feature code lives under `LPCounter/Feat/Game/` (Model/View split).

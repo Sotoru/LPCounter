@@ -5,7 +5,7 @@ Le due app devono avere gli stessi componenti di interfaccia e le stesse funzion
 l'implementazione, che usa sempre componenti nativi e best practice della piattaforma
 (Apple HIG / Material 3). Ogni modifica a funzionalità o UI parte da qui.
 
-Stato: ✅ allineato · ⚠️ iOS da allineare (vedi [Divergenze](#divergenze-da-chiudere)).
+Stato: le due app sono allineate; le differenze residue sono in [Divergenze](#divergenze-da-chiudere).
 
 ## 1. Modello
 
@@ -95,12 +95,9 @@ Aspetto, colori e animazioni seguono il sistema; non vanno imitati tra piattafor
 
 ## Divergenze da chiudere
 
-Android è il riferimento (§2). iOS oggi differisce così:
+Android è il riferimento (§2). iOS è allineato a §1–§6 (stesse regole in `PlayerScore` e `CalculatorState`, stessi
+esempi di §3 nei test di entrambe le app). Restano:
 
-1. ⚠️ **History in memoria e con totali assoluti** (`@State [Int]` in `GameCardView`). Va spostata nello store condiviso come variazioni con segno, max 200.
-2. ⚠️ **Annulla** imposta il totale a `history.last ?? 8000`: non è relativo, e perde le modifiche del widget.
-3. ⚠️ **Widget senza clamp:** `DataService.handleLifePoints` può portare il totale sotto zero, e non scrive in history.
-4. ⚠️ **Cronologia:** il colore dipende da `number > 0` su totali assoluti, quindi è sbagliato; `ForEach(id: \.self)` rompe con valori duplicati, che con le variazioni sono comuni.
-5. ⚠️ **Dimezza** registra il nuovo totale, e registra anche variazioni nulle.
-6. ⚠️ **Test:** iOS non ha un test target; i casi di §3 vanno coperti.
-7. ℹ️ Tooling: Android ha le stringhe in italiano; iOS solo `en.lproj`.
+1. ℹ️ **Lingue:** Android ha `en` e `it`; iOS solo `en`.
+2. ℹ️ **Dati preesistenti:** su iOS, una history salvata prima dell'allineamento non esiste (era solo in memoria), quindi
+   non serve migrazione. I totali restano nelle stesse chiavi.

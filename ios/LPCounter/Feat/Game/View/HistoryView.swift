@@ -9,14 +9,15 @@ import SwiftUI
 
 struct HistoryView: View {
     
-    @Binding var history: [Int]
+    let history: [Int]
     
     var body: some View {
         if(history.isEmpty){
             Text("No history")
         } else {
             List {
-                ForEach(history.reversed(), id: \.self) { number in
+                // Newest first. Changes can repeat, so a row is identified by its position.
+                ForEach(Array(history.enumerated().reversed()), id: \.offset) { _, number in
                     let isPositive = number > 0
                         
                     Text("\(isPositive ? "+" : "-") \(abs(number))")
@@ -31,7 +32,5 @@ struct HistoryView: View {
 
 #Preview {
     
-    @Previewable @State var history: [Int] = [-2400,-1100,1000,-300,-2800]
-    
-    HistoryView(history: $history)
+    HistoryView(history: [-2400,-1100,1000,-300,-2800,-300])
 }
