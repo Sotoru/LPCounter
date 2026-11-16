@@ -18,7 +18,11 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Undo
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.EmojiEvents
 import androidx.compose.material.icons.rounded.Percent
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledIconButton
@@ -46,14 +50,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import it.sotoru.lpcounter.R
-import it.sotoru.lpcounter.data.INITIAL_LIFE_POINTS
 import kotlin.math.abs
 
 /** One player's card: a pager with the counter and the history. */
 @Composable
 fun GameCard(
     lifePoints: Int,
+    startingLifePoints: Int,
     history: List<Int>,
+    /** null while playing; true = this player won, false = lost (SPEC §4). */
+    result: Boolean?,
     inverted: Boolean,
     isLandscape: Boolean,
     onSetLifePoints: (Int) -> Unit,
@@ -73,7 +79,7 @@ fun GameCard(
         Box(Modifier.fillMaxSize()) {
             HorizontalPager(pagerState, Modifier.fillMaxSize()) { page ->
                 when (page) {
-                    0 -> CounterPage(lifePoints, inverted, isLandscape, onSetLifePoints, onHalve, onUndo, onReset, history.isEmpty())
+                    0 -> CounterPage(lifePoints, startingLifePoints, result, inverted, isLandscape, onSetLifePoints, onHalve, onUndo, onReset, history.isEmpty())
                     else -> HistoryPage(history)
                 }
             }
@@ -99,6 +105,8 @@ fun GameCard(
 @Composable
 private fun CounterPage(
     lifePoints: Int,
+    startingLifePoints: Int,
+    result: Boolean?,
     inverted: Boolean,
     isLandscape: Boolean,
     onSetLifePoints: (Int) -> Unit,
@@ -118,25 +126,29 @@ private fun CounterPage(
             lifePoints.toString(),
             Modifier
                 .fillMaxWidth()
-                .clickable(onClickLabel = stringResource(R.string.action_open_calculator)) { showSheet = true }
+                .clickable(enabled = result == null, onClickLabel = stringResource(R.string.action_open_calculator)) { showSheet = true }
                 .padding(bottom = 24.dp),
             style = MaterialTheme.typography.displayLargeEmphasized,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = if (lifePoints == 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             maxLines = 1,
             autoSize = TextAutoSize.StepBased(minFontSize = 40.sp, maxFontSize = 100.sp),
         )
+        if (result != null) {
+            ResultChip(won = result)
+            return@Column
+        }
         Row(horizontalArrangement = Arrangement.spacedBy(ButtonGroupSpacing)) {
             val colors = MaterialTheme.colorScheme
             CounterButton(Icons.Rounded.Clear, R.string.action_reset_player,
                 IconButtonDefaults.filledIconButtonColors(colors.errorContainer, colors.onErrorContainer),
-                enabled = lifePoints != INITIAL_LIFE_POINTS, onClick = onReset)
+                enabled = lifePoints != startingLifePoints, onClick = onReset)
             CounterButton(Icons.AutoMirrored.Rounded.Undo, R.string.action_undo,
                 IconButtonDefaults.filledIconButtonColors(colors.secondaryContainer, colors.onSecondaryContainer),
                 enabled = !historyEmpty, onClick = onUndo)
             CounterButton(Icons.Rounded.Percent, R.string.action_halve,
                 IconButtonDefaults.filledIconButtonColors(colors.tertiaryContainer, colors.onTertiaryContainer),
-                enabled = true, onClick = onHalve)
+                enabled = lifePoints != 0, onClick = onHalve)
         }
     }
 
@@ -152,6 +164,22 @@ private fun CounterPage(
 }
 
 private val ButtonGroupSpacing = 8.dp
+
+@Composable
+private fun ResultChip(won: Boolean) {
+    val colors = MaterialTheme.colorScheme
+    AssistChip(
+        onClick = {},
+        label = { Text(stringResource(if (won) R.string.result_winner else R.string.result_defeated)) },
+        leadingIcon = { Icon(if (won) Icons.Rounded.EmojiEvents else Icons.Rounded.Close, null) },
+        colors = AssistChipDefaults.assistChipColors(
+            containerColor = if (won) colors.tertiaryContainer else colors.errorContainer,
+            labelColor = if (won) colors.onTertiaryContainer else colors.onErrorContainer,
+            leadingIconContentColor = if (won) colors.onTertiaryContainer else colors.onErrorContainer,
+        ),
+        border = null,
+    )
+}
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

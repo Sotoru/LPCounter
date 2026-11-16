@@ -7,68 +7,36 @@
 
 import SwiftUI
 
-
-
-
-struct GameCardProps {
+/// One player's card: the counter, whose top area shows the total or its history; the clock button next
+/// to Undo and Halve switches between them, and the buttons never move (SPEC §4).
+struct GameCardView: View {
     let model: GameViewModel
     let player: Player
-    @Binding var isLandscape: Bool
-    let direction: CounterDirection
-}
-
-
-struct GameCardView: View {
-    let props: GameCardProps
+    let isLandscape: Bool
+    @Environment(\.introStep) private var introStep
 
     var body: some View {
-        TabView {
-            CounterView(model: props.model, player: props.player, isLandscape: props.$isLandscape, direction: props.direction)
-            HistoryView(history: props.model.score(props.player).history)
-                .padding(8)
+        VStack(spacing: 4) {
+            Text(player == .one ? "Player 1" : "Player 2")
+                .led(16, color: LED.lit.opacity(0.75), glow: false)
+                .accessibilityAddTraits(.isHeader)
+                .opacity(introStep >= 2 ? 1 : 0)
+            // Not clipped: the floating delta and the shake run past the card's edges.
+            CounterView(model: model, player: player, isLandscape: isLandscape)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        #if os(iOS)
-        .tabViewStyle(.page)
-        #endif
-        .glassCard(playerNumber: props.player.number, isLandscape: props.isLandscape)
-    }
-}
-
-
-// MARK: - View Convenience
-private extension View {
-    func glassCard(cornerRadius: CGFloat = 32, playerNumber: Int = 1, isLandscape: Bool) -> some View {
-        self
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .glassEffect(.clear, in: .rect(cornerRadius: cornerRadius))
-            .padding()
-            .rotationEffect(.degrees(isLandscape ? 360 : (playerNumber == 1 ? 0 : 180)))
+        .padding(.horizontal, 8)
+        .padding(.vertical, 8)
+        // One container per player, so VoiceOver reads Player 2's turned card as a unit, top to bottom.
+        .accessibilityElement(children: .contain)
+        // Players face each other across the device in portrait; in landscape both read upright.
+        .environment(\.ledFlipped, !isLandscape && player == .two)
+        .rotationEffect(.degrees(isLandscape || player == .one ? 0 : 180))
     }
 }
 
 #Preview {
-    @Previewable @State var model = GameViewModel(defaults: nil)
-    @Previewable @State var isLandscape = false
-
-    let props = GameCardProps(
-        model: model,
-        player: .one,
-        isLandscape: $isLandscape,
-        direction: .normal
-    )
-    
-    GeometryReader { geometry in
-        ZStack {
-            LinearGradient(
-                colors: [Color.red.opacity(0.5), Color.blue.opacity(0.5)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
-            
-            GameCardView(props: props)
-                .frame(height: geometry.size.height / 2 )
-        }
-    }
+    GameCardView(model: GameViewModel(defaults: nil), player: .one, isLandscape: false)
+        .frame(height: 420)
+        .background(LEDMatrixBackground())
 }
-

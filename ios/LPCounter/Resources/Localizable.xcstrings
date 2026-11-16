@@ -1,73 +1,167 @@
 {
   "sourceLanguage": "en",
-  "version": "1.0",
   "strings": {
-    "No history": {
+    "%@ %lld": {
       "localizations": {
-        "it": {
+        "en": {
           "stringUnit": {
-            "state": "translated",
-            "value": "Nessuna cronologia"
+            "state": "new",
+            "value": "%1$@ %2$lld"
           }
         }
       }
     },
-    "Edit life points": {
+    "%lld": {},
+    "%lld life points": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Modifica i punti vita"
+            "value": "%lld punti vita"
           }
         }
       }
     },
-    "Reset life points": {
+    "%lld min": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Azzera i punti vita"
+            "value": "%lld min"
           }
         }
       }
     },
-    "Undo": {
+    "%lld s": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld s"
+          }
+        }
+      }
+    },
+    "+": {},
+    "+%lld": {},
+    "-": {},
+    "0": {},
+    "4000 · Speed Duel": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4000 · Speed Duel"
+          }
+        }
+      }
+    },
+    "A new starting value applies now if the duel hasn't started, otherwise at the next reset. The timer starts with Play.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un nuovo valore iniziale vale subito se il duello non è iniziato, altrimenti dal prossimo azzeramento. Il timer parte con Gioca."
+          }
+        }
+      }
+    },
+    "A tap on every life point change": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un colpetto a ogni modifica dei punti vita"
+          }
+        }
+      }
+    },
+    "About": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informazioni"
+          }
+        }
+      }
+    },
+    "Add": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somma"
+          }
+        }
+      }
+    },
+    "Add 1000": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi 1000"
+          }
+        }
+      }
+    },
+    "Again": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ancora"
+          }
+        }
+      }
+    },
+    "Amber": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambra"
+          }
+        }
+      }
+    },
+    "Appearance": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aspetto"
+          }
+        }
+      }
+    },
+    "Apply": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applica"
+          }
+        }
+      }
+    },
+    "At 0 life points: who wins, and New duel in place of reset": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A 0 punti vita: chi vince, e Nuova partita al posto di azzera"
+          }
+        }
+      }
+    },
+    "Cancel": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Annulla"
-          }
-        }
-      }
-    },
-    "Halve life points": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dimezza i punti vita"
-          }
-        }
-      }
-    },
-    "Reset game": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Azzera la partita"
-          }
-        }
-      }
-    },
-    "Close": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chiudi"
           }
         }
       }
@@ -82,25 +176,773 @@
         }
       }
     },
-    "Switch between add and subtract": {
+    "Close": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Passa tra somma e sottrazione"
+            "value": "Chiudi"
           }
         }
       }
     },
-    "Apply": {
+    "Colour": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Applica"
+            "value": "Colore"
+          }
+        }
+      }
+    },
+    "Colour and dot shape, also in widgets and the Live Activity.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colore e forma dei punti, anche nei widget e nella Live Activity."
+          }
+        }
+      }
+    },
+    "Confirm before resetting": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conferma prima di azzerare"
+          }
+        }
+      }
+    },
+    "Custom…": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizza…"
+          }
+        }
+      }
+    },
+    "Cyan": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ciano"
+          }
+        }
+      }
+    },
+    "Data": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dati"
+          }
+        }
+      }
+    },
+    "Defeated": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sconfitto"
+          }
+        }
+      }
+    },
+    "Delete": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elimina"
+          }
+        }
+      }
+    },
+    "Delete all data": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elimina tutti i dati"
+          }
+        }
+      }
+    },
+    "Delete all data?": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminare tutti i dati?"
+          }
+        }
+      }
+    },
+    "Diamond": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rombi"
+          }
+        }
+      }
+    },
+    "Dim screen": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oscura lo schermo"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fine"
+          }
+        }
+      }
+    },
+    "Duel": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duello"
+          }
+        }
+      }
+    },
+    "Duel screen": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schermata di gioco"
+          }
+        }
+      }
+    },
+    "Duration": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durata"
+          }
+        }
+      }
+    },
+    "Edit life points": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifica i punti vita"
+          }
+        }
+      }
+    },
+    "End duel": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termina il duello"
+          }
+        }
+      }
+    },
+    "End duel automatically": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fine duello automatica"
+          }
+        }
+      }
+    },
+    "Flip a coin": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lancia una moneta"
+          }
+        }
+      }
+    },
+    "Fonts": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Font"
+          }
+        }
+      }
+    },
+    "Frost": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brina"
+          }
+        }
+      }
+    },
+    "Halve life points": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dimezza i punti vita"
+          }
+        }
+      }
+    },
+    "Haptics": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vibrazione"
+          }
+        }
+      }
+    },
+    "Heads": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testa"
+          }
+        }
+      }
+    },
+    "History": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cronologia"
+          }
+        }
+      }
+    },
+    "Home": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home"
+          }
+        }
+      }
+    },
+    "Ice": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ghiaccio"
+          }
+        }
+      }
+    },
+    "Keep it to pick up from the Home, or end it now.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tienilo per riprenderlo dalla Home, oppure chiudilo ora."
+          }
+        }
+      }
+    },
+    "LP": {},
+    "Leave the duel?": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uscire dal duello?"
+          }
+        }
+      }
+    },
+    "Life points": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Punti vita"
+          }
+        }
+      }
+    },
+    "Life points go back to the starting value and the history is cleared.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I punti vita tornano a quelli iniziali e la cronologia si svuota."
+          }
+        }
+      }
+    },
+    "Life points, history and timer. Settings are kept.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Punti vita, cronologia e timer. Le impostazioni restano."
+          }
+        }
+      }
+    },
+    "Never": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mai"
+          }
+        }
+      }
+    },
+    "New duel": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuovo duello"
+          }
+        }
+      }
+    },
+    "Night blue": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blu notte"
+          }
+        }
+      }
+    },
+    "No history": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna cronologia"
+          }
+        }
+      }
+    },
+    "Off": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spento"
+          }
+        }
+      }
+    },
+    "Opens the keypad. Swipe up or down to change by 100.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apre il tastierino. Scorri in su o in giù per cambiare di 100."
+          }
+        }
+      }
+    },
+    "P1": {},
+    "P2": {},
+    "Pause timer": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metti in pausa il timer"
+          }
+        }
+      }
+    },
+    "Pixel style": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stile pixel"
+          }
+        }
+      }
+    },
+    "Play": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gioca"
+          }
+        }
+      }
+    },
+    "Player 1": {},
+    "Player 1 life points": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Punti vita del giocatore 1"
+          }
+        }
+      }
+    },
+    "Player 1 wins": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vince il giocatore 1"
+          }
+        }
+      }
+    },
+    "Player 2": {},
+    "Player 2 life points": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Punti vita del giocatore 2"
+          }
+        }
+      }
+    },
+    "Player 2 wins": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vince il giocatore 2"
+          }
+        }
+      }
+    },
+    "Presets": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preimpostati"
+          }
+        }
+      }
+    },
+    "Remove timer": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rimuovi timer"
+          }
+        }
+      }
+    },
+    "Reset game": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azzera la partita"
+          }
+        }
+      }
+    },
+    "Reset life points": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azzera i punti vita"
+          }
+        }
+      }
+    },
+    "Reset the duel?": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azzerare il duello?"
+          }
+        }
+      }
+    },
+    "Resume": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riprendi"
+          }
+        }
+      }
+    },
+    "Resume later": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riprendi più tardi"
+          }
+        }
+      }
+    },
+    "Resume timer": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riprendi il timer"
+          }
+        }
+      }
+    },
+    "Roll a die": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lancia un dado"
+          }
+        }
+      }
+    },
+    "Round": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tondi"
+          }
+        }
+      }
+    },
+    "Round timer": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timer del round"
+          }
+        }
+      }
+    },
+    "Saves battery when idle": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Risparmia batteria se inattivo"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impostazioni"
+          }
+        }
+      }
+    },
+    "Square": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quadrati"
+          }
+        }
+      }
+    },
+    "Starting life points": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Punti vita iniziali"
+          }
+        }
+      }
+    },
+    "Subtract": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sottrai"
+          }
+        }
+      }
+    },
+    "Subtract 1000": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Togli 1000"
+          }
+        }
+      }
+    },
+    "TEST TO DO": {},
+    "Tails": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Croce"
+          }
+        }
+      }
+    },
+    "Tap to duel": {
+      "extractionState": "stale",
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca per duellare"
+          }
+        }
+      }
+    },
+    "The screen stays on during a duel. Swipe on a total: right/left ±100, up/down ±1000.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durante il duello lo schermo resta acceso e si oscura dopo questo tempo senza tocchi. Scorri su un totale: destra/sinistra ±100, su/giù ±1000."
+          }
+        }
+      }
+    },
+    "Timer": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timer"
+          }
+        }
+      }
+    },
+    "Tournament matches usually last 45 or 50 minutes.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le partite di torneo durano di solito 45 o 50 minuti."
+          }
+        }
+      }
+    },
+    "Undo": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annulla"
+          }
+        }
+      }
+    },
+    "Version": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versione"
+          }
+        }
+      }
+    },
+    "Winner": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vince"
+          }
+        }
+      }
+    },
+    "add %lld": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "aggiungi %lld"
+          }
+        }
+      }
+    },
+    "result %lld": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "risultato %lld"
+          }
+        }
+      }
+    },
+    "subtract %lld": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sottrai %lld"
+          }
+        }
+      }
+    },
+    "↺ asks before both totals go back": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↺ chiede prima di riportare i totali all'inizio"
           }
         }
       }
     }
-  }
+  },
+  "version": "1.0"
 }

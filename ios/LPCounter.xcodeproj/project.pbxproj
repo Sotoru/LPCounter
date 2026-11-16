@@ -7,13 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6A0000000000000000000002 /* GameViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0000000000000000000001 /* GameViewModelTests.swift */; };
 		051166F97E094C2DBBC2D6CC /* PlayerScoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F498EDF0ABF3C521425E9EE2 /* PlayerScoreTests.swift */; };
 		0A64641C94611137FEF8CF5D /* CalculatorStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA25EE7E18E6E60C6DF40A /* CalculatorStateTests.swift */; };
 		10F5B93AB4226C4CE8F57F25 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E07CE2A9781D4BE08F6E201B /* Foundation.framework */; };
+		3DC2E0F054CD4F9C5857DC6E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29C58F36EE95FD65A5ACBCF7 /* Foundation.framework */; };
+		6A0000000000000000000002 /* GameViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0000000000000000000001 /* GameViewModelTests.swift */; };
 		6AD114202EC4F18B0020533E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AD1141F2EC4F18B0020533E /* WidgetKit.framework */; };
 		6AD114222EC4F18B0020533E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AD114212EC4F18B0020533E /* SwiftUI.framework */; };
 		6AD1142D2EC4F18B0020533E /* LPCounterWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6AD1141D2EC4F18B0020533E /* LPCounterWidgetExtension.appex */; platformFilters = (ios, macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DF72A7D1FC1E456832B5DE2D /* LPCounterWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 00170E7EA0860975CEFA07E1 /* LPCounterWatch.app */; platformFilters = (ios, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +33,13 @@
 			remoteGlobalIDString = 6AD1141C2EC4F18B0020533E;
 			remoteInfo = LPCounterWidgetExtension;
 		};
+		96D1968B9D8243C502356797 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6AAED5372EB2845B00F16F46 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 638E4B9A8054EFF0E3669DAF;
+			remoteInfo = LPCounterWatch;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,11 +54,24 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C2A8A8C9663E9D2D8F3414A7 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				DF72A7D1FC1E456832B5DE2D /* LPCounterWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6A0000000000000000000001 /* GameViewModelTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameViewModelTests.swift; sourceTree = "<group>"; };
+		00170E7EA0860975CEFA07E1 /* LPCounterWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LPCounterWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16D2B8285AC7DE1C3D362F04 /* LPCounterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LPCounterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		29C58F36EE95FD65A5ACBCF7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS11.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		6A0000000000000000000001 /* GameViewModelTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameViewModelTests.swift; sourceTree = "<group>"; };
 		6A6EBF9A30014016008FA5C0 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		6AAED53F2EB2845B00F16F46 /* LPCounter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LPCounter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AD1141D2EC4F18B0020533E /* LPCounterWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LPCounterWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,6 +83,17 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4AC74B7E1FCB2043533DD822 /* Exceptions for "LPCounter" folder in "LPCounterWatch" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Design/LED.swift,
+				Feat/Game/Model/GameModel.swift,
+				Utils/WatchMessage.swift,
+				"Resources/Fonts/DSEG7Classic-Bold.ttf",
+				Resources/Localizable.xcstrings,
+			);
+			target = 638E4B9A8054EFF0E3669DAF /* LPCounterWatch */;
+		};
 		6A15DC0A2ECCBD29002942E1 /* Exceptions for "Extensions" folder in "LPCounter" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -69,7 +102,6 @@
 				LPCounterWidget/Resources/Localizable.xcstrings,
 				LPCounterWidget/Widgets/FirstPlayerWidget/FirstPlayerWidget.swift,
 				LPCounterWidget/Widgets/FirstPlayerWidget/Provider/FirstPlayerWidgetProvider.swift,
-				LPCounterWidget/Widgets/FirstPlayerWidget/View/LargeSizeView.swift,
 				LPCounterWidget/Widgets/FirstPlayerWidget/View/SmallSizeView.swift,
 				LPCounterWidget/Widgets/FirstPlayerWidget/View/WidgetView.swift,
 				LPCounterWidget/Widgets/GameWidget/GameWidget.swift,
@@ -91,7 +123,6 @@
 				LPCounterWidget/Resources/Localizable.xcstrings,
 				LPCounterWidget/Widgets/FirstPlayerWidget/FirstPlayerWidget.swift,
 				LPCounterWidget/Widgets/FirstPlayerWidget/Provider/FirstPlayerWidgetProvider.swift,
-				LPCounterWidget/Widgets/FirstPlayerWidget/View/LargeSizeView.swift,
 				LPCounterWidget/Widgets/FirstPlayerWidget/View/SmallSizeView.swift,
 				LPCounterWidget/Widgets/FirstPlayerWidget/View/WidgetView.swift,
 				LPCounterWidget/Widgets/GameWidget/GameWidget.swift,
@@ -100,15 +131,25 @@
 				LPCounterWidget/Widgets/GameWidget/View/GameWidgetEntryView.swift,
 				LPCounterWidget/Widgets/Shared/Assets.xcassets,
 				LPCounterWidget/Widgets/Shared/DataService.swift,
+				LPCounterWidget/Widgets/Shared/WidgetStyle.swift,
 			);
 			target = 6AD1141C2EC4F18B0020533E /* LPCounterWidgetExtension */;
 		};
 		6ACC737E2EEACD870082A1A6 /* Exceptions for "LPCounter" folder in "LPCounterWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Design/LED.swift,
 				Feat/Game/Model/GameModel.swift,
+				"Resources/Fonts/DSEG7Classic-Bold.ttf",
 			);
 			target = 6AD1141C2EC4F18B0020533E /* LPCounterWidgetExtension */;
+		};
+		7B3C1E0A2F0000000000A001 /* Exceptions for "LPCounter" folder in "LPCounter" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/Info.plist,
+			);
+			target = 6AAED53E2EB2845B00F16F46 /* LPCounter */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -132,9 +173,18 @@
 		6AAED5412EB2845B00F16F46 /* LPCounter */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				7B3C1E0A2F0000000000A001 /* Exceptions for "LPCounter" folder in "LPCounter" target */,
 				6ACC737E2EEACD870082A1A6 /* Exceptions for "LPCounter" folder in "LPCounterWidgetExtension" target */,
+				4AC74B7E1FCB2043533DD822 /* Exceptions for "LPCounter" folder in "LPCounterWatch" target */,
 			);
 			path = LPCounter;
+			sourceTree = "<group>";
+		};
+		EFAF8655A93187BE11E9FC9A /* Watch */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			path = Watch;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -164,6 +214,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C505154B468A762ACC0AAD87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DC2E0F054CD4F9C5857DC6E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -177,6 +235,7 @@
 				6A6EBF9A30014016008FA5C0 /* CLAUDE.md */,
 				6A6EBF9C30014016008FA5C0 /* Docs */,
 				D00E7A55CC757B02989A9424 /* LPCounterTests */,
+				EFAF8655A93187BE11E9FC9A /* Watch */,
 			);
 			sourceTree = "<group>";
 		};
@@ -186,6 +245,7 @@
 				6AAED53F2EB2845B00F16F46 /* LPCounter.app */,
 				6AD1141D2EC4F18B0020533E /* LPCounterWidgetExtension.appex */,
 				16D2B8285AC7DE1C3D362F04 /* LPCounterTests.xctest */,
+				00170E7EA0860975CEFA07E1 /* LPCounterWatch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -196,6 +256,7 @@
 				6AD1141F2EC4F18B0020533E /* WidgetKit.framework */,
 				6AD114212EC4F18B0020533E /* SwiftUI.framework */,
 				9C15ACBCD6932E0542FAB3B6 /* iOS */,
+				E011492825BAD174A8B4DD26 /* watchOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -219,6 +280,14 @@
 			path = LPCounterTests;
 			sourceTree = "<group>";
 		};
+		E011492825BAD174A8B4DD26 /* watchOS */ = {
+			isa = PBXGroup;
+			children = (
+				29C58F36EE95FD65A5ACBCF7 /* Foundation.framework */,
+			);
+			name = watchOS;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -240,6 +309,26 @@
 			productReference = 16D2B8285AC7DE1C3D362F04 /* LPCounterTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		638E4B9A8054EFF0E3669DAF /* LPCounterWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84C2C6D7370D5318E4EA1260 /* Build configuration list for PBXNativeTarget "LPCounterWatch" */;
+			buildPhases = (
+				CAD35199CAE0642A68D674BA /* Sources */,
+				C505154B468A762ACC0AAD87 /* Frameworks */,
+				F69DD6C9CE34CD292E48769D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				EFAF8655A93187BE11E9FC9A /* Watch */,
+			);
+			name = LPCounterWatch;
+			productName = LPCounterWatch;
+			productReference = 00170E7EA0860975CEFA07E1 /* LPCounterWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
 		6AAED53E2EB2845B00F16F46 /* LPCounter */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6AAED54C2EB2845C00F16F46 /* Build configuration list for PBXNativeTarget "LPCounter" */;
@@ -248,11 +337,13 @@
 				6AAED53C2EB2845B00F16F46 /* Frameworks */,
 				6AAED53D2EB2845B00F16F46 /* Resources */,
 				6AD1142E2EC4F18B0020533E /* Embed Foundation Extensions */,
+				C2A8A8C9663E9D2D8F3414A7 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				6A15DBE52ECCBC49002942E1 /* PBXTargetDependency */,
+				2D4588C437238399F9852E50 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				6A15DBE72ECCBD1E002942E1 /* Extensions */,
@@ -316,6 +407,7 @@
 				6AAED53E2EB2845B00F16F46 /* LPCounter */,
 				6AD1141C2EC4F18B0020533E /* LPCounterWidgetExtension */,
 				48F5C145A94E721EFB607731 /* LPCounterTests */,
+				638E4B9A8054EFF0E3669DAF /* LPCounterWatch */,
 			);
 		};
 /* End PBXProject section */
@@ -336,6 +428,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6AD1141B2EC4F18B0020533E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F69DD6C9CE34CD292E48769D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -369,9 +468,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CAD35199CAE0642A68D674BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2D4588C437238399F9852E50 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LPCounterWatch;
+			platformFilters = (
+				ios,
+			);
+			target = 638E4B9A8054EFF0E3669DAF /* LPCounterWatch */;
+			targetProxy = 96D1968B9D8243C502356797 /* PBXContainerItemProxy */;
+		};
 		6A15DBE52ECCBC49002942E1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilters = (
@@ -542,6 +657,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LPCounter/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
@@ -549,12 +665,10 @@
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleLightContent;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -592,6 +706,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LPCounter/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
@@ -599,12 +714,10 @@
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleLightContent;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -711,6 +824,40 @@
 			};
 			name = Release;
 		};
+		7AC721288D7B5AE407A96B8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q994KUZV9A;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = LPCounter;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = it.sotoru.LPCounter;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.sotoru.LPCounter.watchkitapp;
+				PRODUCT_NAME = LPCounterWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
 		DC9CD9E732DF3ADF37480CAA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -723,6 +870,39 @@
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LPCounter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LPCounter";
+			};
+			name = Debug;
+		};
+		DFA2BBC9CF317ABAE23B7FD2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q994KUZV9A;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = LPCounter;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = it.sotoru.LPCounter;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.sotoru.LPCounter.watchkitapp;
+				PRODUCT_NAME = LPCounterWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
 		};
@@ -761,6 +941,15 @@
 			buildConfigurations = (
 				6AD1142F2EC4F18B0020533E /* Debug */,
 				6AD114302EC4F18B0020533E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84C2C6D7370D5318E4EA1260 /* Build configuration list for PBXNativeTarget "LPCounterWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AC721288D7B5AE407A96B8A /* Release */,
+				DFA2BBC9CF317ABAE23B7FD2 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

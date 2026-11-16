@@ -8,32 +8,28 @@ final class LiveActivityManager {
     static let shared = LiveActivityManager()
     private init() {}
 
-    func startActivity(game: Game) {
-        guard ActivityAuthorizationInfo().areActivitiesEnabled else {
-            print("❌ Live Activities non abilitate")
+    func startActivity(_ p1: Int, _ p2: Int) {
+        guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
+        // One activity per duel: re-entering the game updates the one already on the Lock Screen.
+        guard Activity<GameLiveAttributes>.activities.isEmpty else {
+            updateActivity(p1, p2)
             return
         }
 
         let content = ActivityContent(
             state: GameLiveAttributes.ContentState(
-                firstPlayerLp: game.firstPlayerLp,
-                secondPlayerLp: game.secondPlayerLp,
+                firstPlayerLp: p1,
+                secondPlayerLp: p2,
                 lastUpdate: Date()
             ),
             staleDate: nil
         )
 
-        do {
-            _ = try Activity.request(attributes: GameLiveAttributes(), content: content)
-        } catch {
-            print("❌ Errore avvio Live Activity: \(error)")
-        }
+        // Fails only if the system refuses (budget, permissions): the duel goes on without it.
+        _ = try? Activity.request(attributes: GameLiveAttributes(), content: content)
     }
 
-    func updateActivity(game: Game) {
-        // Cattura solo valori Sendable; l'activity viene recuperata fuori dal main actor.
-        let p1 = game.firstPlayerLp
-        let p2 = game.secondPlayerLp
+    func updateActivity(_ p1: Int, _ p2: Int) {
         Task.detached {
             let content = ActivityContent(
                 state: GameLiveAttributes.ContentState(
@@ -45,22 +41,6 @@ final class LiveActivityManager {
             )
             for activity in Activity<GameLiveAttributes>.activities {
                 await activity.update(content)
-            }
-        }
-    }
-
-    func endActivity() {
-        Task.detached {
-            let content = ActivityContent(
-                state: GameLiveAttributes.ContentState(
-                    firstPlayerLp: 0,
-                    secondPlayerLp: 0,
-                    lastUpdate: Date()
-                ),
-                staleDate: nil
-            )
-            for activity in Activity<GameLiveAttributes>.activities {
-                await activity.end(content, dismissalPolicy: .immediate)
             }
         }
     }

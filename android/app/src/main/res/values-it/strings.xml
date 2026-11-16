@@ -20,4 +20,40 @@
 
     <string name="channel_live_score">Punteggio live</string>
     <string name="live_score_title">Punti vita</string>
+
+    <string name="action_new_duel">Nuovo duello</string>
+    <string name="action_cancel">Annulla</string>
+    <string name="reset_confirm_title">Azzerare il duello?</string>
+    <string name="reset_confirm_text">I punti vita tornano al valore iniziale. La cronologia resta.</string>
+    <string name="result_winner">Vince</string>
+    <string name="result_defeated">Sconfitto</string>
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_section_duel_in_progress">Duello in corso</string>
+    <string name="settings_confirm_reset">Conferma prima di azzerare</string>
+    <string name="settings_confirm_reset_hint">↺ chiede conferma</string>
+    <string name="settings_auto_end">Fine duello automatica</string>
+    <string name="settings_auto_end_hint">Mostra chi vince quando i punti vita arrivano a 0</string>
+    <string name="settings_haptics">Vibrazione</string>
+    <string name="settings_haptics_hint">Feedback a ogni modifica dei punti vita</string>
+    <string name="settings_section_appearance">Aspetto</string>
+    <string name="settings_theme">Tema</string>
+    <string name="theme_system">Sistema</string>
+    <string name="theme_light">Chiaro</string>
+    <string name="theme_dark">Scuro</string>
+    <string name="settings_starting_lp">Punti vita iniziali</string>
+    <string name="settings_starting_lp_hint">Speed Duel: 4000. Vale subito se il duello non è iniziato, altrimenti al prossimo azzeramento.</string>
+    <string name="tab_home">Home</string>
+    <string name="action_play">Gioca</string>
+    <string name="settings_timer">Timer</string>
+    <string name="settings_timer_hint">Round di torneo. Continua tra un duello e l\'altro fino alla fine.</string>
+    <string name="timer_off">Spento</string>
+    <string name="timer_minutes">%1$d min</string>
+    <string name="home_section_recent">Duelli recenti</string>
+    <string name="no_recent_duels">Nessun duello recente</string>
+    <string name="settings_section_duel">Duello</string>
+    <string name="settings_section_data">Dati</string>
+    <string name="settings_clear_data">Elimina tutti i dati</string>
+    <string name="settings_clear_data_hint">Punti vita, cronologia, duelli recenti e timer. Le impostazioni restano.</string>
+    <string name="clear_confirm_title">Eliminare tutti i dati?</string>
+    <string name="action_delete">Elimina</string>
 </resources>

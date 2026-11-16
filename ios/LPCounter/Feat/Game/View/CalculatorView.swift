@@ -7,176 +7,183 @@
 
 import SwiftUI
 
-
+/// The keypad sheet (SPEC §3), drawn on the app's dot matrix: the total and the result on the grid,
+/// Subtract / Add as one big two-way switch, then the digits.
 struct CalculatorView: View {
-    
+    let player: Player
     let lifePoints: Int
-    @Binding var isLandscape: Bool
+    let isLandscape: Bool
     /// Receives the signed change to apply.
     let onApply: (Int) -> Void
     @State private var calc = CalculatorState()
-    
-    private let btnSize: CGFloat = 80
-    
+
+    /// Spacing on the matrix's pitch (5 pt), so keys, switch and gaps line up with the dots behind.
+    private enum Metrics {
+        static let gap: CGFloat = 15
+        static let row: CGFloat = 55
+        static let margin: CGFloat = 20
+        static let width: CGFloat = 420
+    }
+
     var body: some View {
         Group {
             if isLandscape {
-                landscapeLayout()
-            } else {
-                portraitLayout()
-            }
-        }
-        .padding()
-    }
-}
-
-// MARK: - Layout Views
-private extension CalculatorView {
-    @ViewBuilder
-    func portraitLayout() -> some View {
-        VStack(spacing: 20) {
-            lifePointsText()
-            headerGrid()
-            calculatorGrid(columns: 3)
-        }
-    }
-    
-    @ViewBuilder
-    func landscapeLayout() -> some View {
-        HStack(spacing: 40) {
-            calculatorGrid(columns: 4)
+                // Two equal columns; the switch sits on the keypad's last row, same height and gap.
+                HStack(alignment: .bottom, spacing: Metrics.gap * 2) {
+                    VStack(spacing: Metrics.gap) {
+                        display
+                        operationSwitch
+                    }
+                    .frame(maxWidth: Metrics.width)
+                    keypad(columns: 4)
+                        .frame(maxWidth: Metrics.width)
+                }
                 .frame(maxWidth: .infinity)
-            
-            VStack(spacing: 20) {
-                lifePointsText()
-                headerGrid()
-            }
-            .frame(maxWidth: .infinity)
-            
-           
-        }
-    }
-    
-    @ViewBuilder
-    func lifePointsText() -> some View {
-        Text(String(lifePoints))
-            .font(.system(size: 100))
-            .bold()
-    }
-    
-    @ViewBuilder
-    func headerGrid() -> some View {
-        Grid(horizontalSpacing: 16, verticalSpacing: 0) {
-            GridRow {
-                // Colonna 1: simbolo operazione
-                Group {
-                    switch calc.operation {
-                    case .increase: Text("+")
-                    case .decrease: Text("-")
+                .frame(maxHeight: .infinity)
+            } else {
+                // Scrolls only when it doesn't fit (large Dynamic Type sizes).
+                ScrollView {
+                    VStack(spacing: Metrics.gap) {
+                        display
+                        // Switch and keys share one column width, so their edges line up.
+                        VStack(spacing: Metrics.gap) {
+                            operationSwitch
+                            keypad(columns: 3)
+                        }
+                        .frame(maxWidth: Metrics.width)
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .bold()
-                .font(.system(size: isLandscape ? 50 : 60))
-                
-                // Colonna 2: valore autocompletato o placeholder
-                Group {
-                    if calc.input != 0 {
-                        Text(String(calc.value))
-                            .font(.system(.title, design: .monospaced))
-                            .fontWeight(.regular)
-                            .foregroundStyle(.secondary)
-                            .transition(.opacity)
-                    } else {
-                        Text("-")
-                            .font(.system(.title, design: .monospaced))
-                            .foregroundStyle(.tertiary)
+                .scrollBounceBehavior(.basedOnSize)
+            }
+        }
+        .padding(Metrics.margin)
+        .sensoryFeedback(.selection, trigger: calc.input)
+        .sensoryFeedback(.impact(weight: .light), trigger: calc.operation)
+    }
+
+    private var adding: Bool { calc.operation == .increase }
+    private var opColor: Color { adding ? LED.green : LED.red }
+    private var result: Int { max(0, lifePoints + calc.delta) }
+
+    // MARK: Display
+
+    /// On the matrix, like the board: the total now, the change typed, and what it leads to.
+    private var display: some View {
+        VStack(spacing: Metrics.gap) {
+            Text(player == .one ? "Player 1" : "Player 2").led(15, color: LED.dim, glow: false)
+            DotMatrixNumber(value: Double(lifePoints), glow: false, maxScale: 2)
+            HStack(spacing: Metrics.gap) {
+                DotMatrixText(text: adding ? "+" : "-", color: opColor)
+                DotMatrixText(text: calc.input == 0 ? "    " : String(calc.value), color: opColor)
+                    .frame(minWidth: 0)
+                DotMatrixText(text: "=", color: LED.dim, glow: false)
+                DotMatrixText(text: calc.input == 0 ? "    " : String(result), color: result == 0 ? LED.red : LED.lit)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, Metrics.gap)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(displayLabel)
+        .animation(.snappy(duration: 0.15), value: calc)
+    }
+
+    /// The panel read as one sentence: "Player 1, 8000 life points, subtract 500, result 7500".
+    private var displayLabel: Text {
+        let who = Text(player == .one ? "Player 1" : "Player 2")
+        let total = Text("\(lifePoints) life points")
+        guard calc.input != 0 else { return who + Text(verbatim: ", ") + total }
+        let op = adding ? Text("add \(calc.value)") : Text("subtract \(calc.value)")
+        return who + Text(verbatim: ", ") + total + Text(verbatim: ", ") + op + Text(verbatim: ", ") + Text("result \(result)")
+    }
+
+    // MARK: Subtract / Add
+
+    /// Two big halves, the active one lit in its colour: one tap on the side you want, no toggling blind.
+    private var operationSwitch: some View {
+        HStack(spacing: Metrics.gap) {
+            side("Subtract", symbol: "minus", on: !adding, color: LED.red)
+            side("Add", symbol: "plus", on: adding, color: LED.green)
+        }
+    }
+
+    private func side(_ title: LocalizedStringKey, symbol: String, on: Bool, color: Color) -> some View {
+        Button {
+            if !on { calc.toggleOperation() }
+        } label: {
+            Label(title, systemImage: symbol)
+                .font(.title3.weight(.bold))
+                .foregroundStyle(on ? LED.background : color)
+                // Exactly a key's height: no extra control-size padding.
+                .frame(maxWidth: .infinity, minHeight: Metrics.row)
+        }
+        .tint(color)
+        .modifier(SideStyle(on: on))
+        .buttonBorderShape(.capsule)
+        .accessibilityAddTraits(on ? .isSelected : [])
+    }
+
+    // MARK: Keypad
+
+    private func keypad(columns: Int) -> some View {
+        VStack(spacing: Metrics.gap) {
+            GlassEffectContainer {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: Metrics.gap), count: columns),
+                          spacing: Metrics.gap) {
+                    ForEach(1...9, id: \.self) { number in
+                        key { calc.append(number) } label: { digit(number) }
                     }
+                    key { calc.clear() } label: { Image(systemName: "xmark") }
+                        .accessibilityLabel("Clear input")
+                        .disabled(calc.input == 0)
+                    key { calc.append(0) } label: { digit(0) }
+                    // Apply: filled in the operation's colour, the key that ends the entry.
+                    Button {
+                        onApply(calc.delta)
+                        calc.clear()
+                    } label: {
+                        Image(systemName: "checkmark")
+                            .font(.title2.weight(.bold))
+                            .foregroundStyle(LED.background)
+                            .frame(maxWidth: .infinity, minHeight: Metrics.row)
+                    }
+                    .buttonStyle(.glassProminent)
+                    .buttonBorderShape(.capsule)
+                    .tint(opColor)
+                    .accessibilityLabel("Apply")
+                    .keyboardShortcut(.defaultAction)
+                    .disabled(calc.input == 0)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
-                
-                // Colonna 3: pulsante clear
-                Button {
-                    calc.clear()
-                } label: {
-                    Image(systemName: "delete.left")
-                }
-                .accessibilityLabel("Clear input")
-                .buttonStyle(CalculatorButtonStyle(size: btnSize))
-                .frame(maxWidth: .infinity, alignment: .center)
             }
         }
-        .animation(.easeInOut(duration: 0.15), value: calc.input)
     }
-    
-    @ViewBuilder
-    func calculatorGrid(columns: Int) -> some View {
-        LazyVGrid(columns: Array(repeating: .init(.flexible()), count: columns), spacing: 16) {
-            ForEach(1...9, id: \.self) { number in
-                Button("\(number)") {
-                    calc.append(number)
-                }
-                .buttonStyle(CalculatorButtonStyle(size: btnSize))
-            }
-            
-            Button {
-                calc.toggleOperation()
-            } label: {
-                Image(systemName: "plus.forwardslash.minus")
-            }
-            .accessibilityLabel("Switch between add and subtract")
-            .buttonStyle(CalculatorButtonStyle(size: btnSize))
-            
-            Button("0") {
-                calc.append(0)
-            }
-            .buttonStyle(CalculatorButtonStyle(size: btnSize))
-            
-            Button {
-                onApply(calc.delta)
-                calc.clear()
-            } label: {
-                Image(systemName: "arrow.right")
-            }
-            .accessibilityLabel("Apply")
-            .buttonStyle(CalculatorButtonStyle(size: btnSize, customColor: .orange))
+
+    private func digit(_ number: Int) -> some View {
+        Text(verbatim: String(number)).font(LED.segmentFont(28, relativeTo: .title))
+    }
+
+    private func key<Label: View>(_ action: @escaping () -> Void, @ViewBuilder label: () -> Label) -> some View {
+        Button(action: action) {
+            label()
+                .font(.title2.weight(.semibold))
+                .frame(maxWidth: .infinity, minHeight: Metrics.row)
         }
+        .buttonStyle(.glass)
+        .buttonBorderShape(.capsule)
     }
 }
 
-// Stile riutilizzabile per i pulsanti della calcolatrice
-private struct CalculatorButtonStyle: ButtonStyle {
-    let size: CGFloat
-    let customColor: Color?
-    
-    init(size: CGFloat, customColor: Color? = nil) {
-        self.size = size
-        self.customColor = customColor
-    }
-    
-    func makeBody(configuration: Configuration) -> some View {
-       configuration.label
-            .font(.system(size: 28, weight: .semibold))
-            .frame(width: size, height: size)
-            .glassEffect(.regular.tint(customColor).interactive())
+/// The lit side is filled in its colour; the other stays glass.
+private struct SideStyle: ViewModifier {
+    let on: Bool
+
+    func body(content: Content) -> some View {
+        if on { content.buttonStyle(.glassProminent) } else { content.buttonStyle(.glass) }
     }
 }
 
-// Preview dinamica
-#Preview("Portrait",traits: .portrait) {
-    @Previewable @State var isLandscape: Bool = false
-    CalculatorView(lifePoints: 8000, isLandscape: $isLandscape, onApply: { _ in })
-}
-
-#Preview("Portrait Dark",traits: .portrait) {
-    @Previewable @State var isLandscape: Bool = false
-    CalculatorView(lifePoints: 8000, isLandscape: $isLandscape, onApply: { _ in })
+#Preview {
+    CalculatorView(player: .one, lifePoints: 8000, isLandscape: false, onApply: { _ in })
+        .background(LEDMatrixBackground())
+        .tint(LED.lit)
         .preferredColorScheme(.dark)
 }
-
-
-#Preview("Landscape",traits: .landscapeLeft) {
-    @Previewable @State var isLandscape: Bool = true
-    CalculatorView(lifePoints: 8000, isLandscape: $isLandscape, onApply: { _ in })
-}
-

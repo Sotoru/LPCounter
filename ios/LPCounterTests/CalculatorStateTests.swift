@@ -5,6 +5,7 @@
 //  Mirrors android/CalculatorStateTest: the examples come from SPEC §3.
 //
 
+import CoreGraphics
 import Testing
 @testable import LPCounter
 
@@ -48,5 +49,16 @@ struct CalculatorStateTests {
         #expect(apply(add) == 8500)
         #expect(apply(type(9, 9)) == 0)
         #expect(apply(type(3, 0, 0)) == 7700)
+    }
+}
+
+/// SPEC §4: swipes on the total.
+@MainActor
+struct SwipeTests {
+    @Test func directionsMapToSteps() {
+        #expect(CounterView.swipeDelta(CGSize(width: 80, height: 10)) == 100)
+        #expect(CounterView.swipeDelta(CGSize(width: -80, height: -10)) == -100)
+        #expect(CounterView.swipeDelta(CGSize(width: 10, height: -80)) == 1000)
+        #expect(CounterView.swipeDelta(CGSize(width: -10, height: 80)) == -1000)
     }
 }

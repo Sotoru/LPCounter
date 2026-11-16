@@ -1,23 +1,25 @@
 {
   "sourceLanguage": "en",
-  "version": "1.0",
   "strings": {
+    "%lld": {},
+    "Add or subtract life points for Player 1.": {},
+    "Add or subtract LP for Player 1": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somma o sottrai LP al Giocatore 1"
+          }
+        }
+      }
+    },
+    "Amount": {},
     "Game": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Partita"
-          }
-        }
-      }
-    },
-    "Preview of the current game": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Anteprima della partita in corso"
           }
         }
       }
@@ -32,55 +34,39 @@
         }
       }
     },
-    "Add or subtract LP for Player 1": {
+    "Player 1?": {},
+    "Preview of the current game": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Somma o sottrai LP al Giocatore 1"
+            "value": "Anteprima della partita in corso"
           }
         }
       }
     },
-    "Add": {
+    "Subtract?": {},
+    "Update LP for Player 1": {},
+    "Subtract 1000": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Somma"
+            "value": "Togli 1000"
           }
         }
       }
     },
-    "Subtract": {
+    "Add 1000": {
       "localizations": {
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sottrai"
-          }
-        }
-      }
-    },
-    "Player 1": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Giocatore 1"
-          }
-        }
-      }
-    },
-    "Player 2": {
-      "localizations": {
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Giocatore 2"
+            "value": "Aggiungi 1000"
           }
         }
       }
     }
-  }
+  },
+  "version": "1.0"
 }

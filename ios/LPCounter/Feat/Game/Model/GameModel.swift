@@ -7,18 +7,6 @@
 
 import Foundation
 
-class Game {
-
-    var firstPlayerLp: Int
-    var secondPlayerLp: Int
-
-    init(firstPlayerLp: Int = 8000, secondPlayerLp: Int = 8000) {
-        self.firstPlayerLp = firstPlayerLp
-        self.secondPlayerLp = secondPlayerLp
-    }
-}
-
-
 // MARK: - Rules (SPEC §2)
 
 /// One player's life points and history. Pure value type: app, widget and tests share these rules.
@@ -46,7 +34,8 @@ nonisolated struct PlayerScore: Equatable {
         lifePoints = new
     }
 
-    mutating func halve() { change(by: lifePoints / 2 - lifePoints) }
+    /// Halves rounding up, as the official rulings do (2425 → 1213).
+    mutating func halve() { change(by: (lifePoints + 1) / 2 - lifePoints) }
 
     /// Reverts the last change relative to the *current* total, so changes made elsewhere (widget) survive.
     mutating func undo() {
@@ -54,8 +43,8 @@ nonisolated struct PlayerScore: Equatable {
         lifePoints = max(0, lifePoints - last)
     }
 
-    mutating func reset() {
-        lifePoints = GameConstants.initialLifePoints
+    mutating func reset(to startingLifePoints: Int = GameConstants.initialLifePoints) {
+        lifePoints = startingLifePoints
         history = []
     }
 
@@ -75,7 +64,13 @@ nonisolated enum Player {
 // MARK: - Constants
 nonisolated enum GameConstants {
     static let initialLifePoints = 8000
+    /// Choices for the starting life points: standard and Speed Duel.
+    static let startingLifePointsOptions = [8000, 4000]
     static let maxHistory = 200
+    /// Timer presets in minutes (SPEC §9): 45 and 50-minute rounds; any other length can be set by hand.
+    static let timerPresets = [45, 50]
+    /// Range for a custom round length, in minutes.
+    static let timerRange = 1...180
     static let appGroup = "group.it.sotoru.LPCounter"
     static let widgetKinds = ["GameWidget", "FirstPlayerWidget", "FirstPlayerLargeWidget"]
 
@@ -84,4 +79,9 @@ nonisolated enum GameConstants {
     static let lifePointsP2Key = "lifePointsP2"
     static let historyP1Key = "historyP1"
     static let historyP2Key = "historyP2"
+    static let startingLifePointsKey = "startingLifePoints"
+    static let timerMinutesKey = "timerMinutes"
+    static let timerEndsAtKey = "timerEndsAt"
+    /// Seconds left while the timer is paused (no `timerEndsAt` then).
+    static let timerPausedKey = "timerPausedRemaining"
 }

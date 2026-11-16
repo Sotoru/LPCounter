@@ -43,6 +43,22 @@ struct PlayerScoreTests {
         #expect(score.history == [-3750])
     }
 
+    @Test func halveRoundsUp() {
+        var odd = PlayerScore(lifePoints: 2425)
+        odd.halve()
+        #expect(odd.lifePoints == 1213)
+        var one = PlayerScore(lifePoints: 1)
+        one.halve()
+        #expect(one.lifePoints == 1)
+        #expect(one.history.isEmpty)
+    }
+
+    @Test func resetUsesTheGivenStartingLifePoints() {
+        var score = PlayerScore(lifePoints: 100, history: [-7900])
+        score.reset(to: 4000)
+        #expect(score == PlayerScore(lifePoints: 4000))
+    }
+
     @Test func halveAtZeroIsNotRecorded() {
         var score = PlayerScore(lifePoints: 0)
         score.halve()

@@ -1,41 +1,44 @@
 #if os(iOS)
-// Extensions/LPCounterWidget/Widgets/GameWidget/View/GameLiveActivityView.swift
 import SwiftUI
 import ActivityKit
 import WidgetKit
 
+/// Lock Screen / banner: both totals on the app's LED matrix, Player 1 on the left like the landscape board.
 struct GameLiveActivityView: View {
     let context: ActivityViewContext<GameLiveAttributes>
-    
+
     var body: some View {
-        VStack(spacing: 8) {
-//            Text(context.attributes.gameName)
-//                .font(.headline)
-            
+        VStack(spacing: 10) {
             HStack {
-                VStack {
-                    Text("Player 1")
-                        .font(.caption)
-                    Text("\(context.state.firstPlayerLp)")
-                        .font(.title)
-                        .fontWeight(.bold)
-                }
-                
+                DotMatrixText(text: "LP·COUNTER")
+                    .accessibilityLabel(Text(verbatim: "LP Counter"))
                 Spacer()
-                
-                VStack {
-                    Text("Player 2")
-                        .font(.caption)
-                    Text("\(context.state.secondPlayerLp)")
-                        .font(.title)
-                        .fontWeight(.bold)
-                }
+                Text(context.state.lastUpdate, style: .time)
+                    .led(13, color: LED.dim, glow: false)
             }
-            .padding()
+            HStack(alignment: .bottom) {
+                total(1, context.state.firstPlayerLp, alignment: .leading)
+                Spacer()
+                Text(verbatim: "VS")
+                    .led(14, color: LED.dim, glow: false)
+                    .padding(.bottom, 12)
+                Spacer()
+                total(2, context.state.secondPlayerLp, alignment: .trailing)
+            }
         }
-        .activityBackgroundTint(Color.black.opacity(0.8))
-        .activitySystemActionForegroundColor(Color.white)
+        .padding(16)
+        .background { LEDMatrixBackground() }
+        .environment(\.ledPitch, 3)
+        .environment(\.colorScheme, .dark)
+        .activityBackgroundTint(LED.background)
+        .activitySystemActionForegroundColor(.white)
+    }
+
+    private func total(_ player: Int, _ value: Int, alignment: HorizontalAlignment) -> some View {
+        VStack(alignment: alignment, spacing: 4) {
+            PlayerLabel(player: player)
+            LifePointsText(value: value, size: 36)
+        }
     }
 }
 #endif
-

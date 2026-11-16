@@ -5,6 +5,8 @@ Monorepo of two native apps for the same product: a Yu-Gi-Oh life-point counter.
 - `ios/` — SwiftUI. See `ios/CLAUDE.md`.
 - `android/` — Jetpack Compose. See `android/CLAUDE.md`.
 - `SPEC.md` — shared specification. **Single source of truth.**
+- `docs/rules/yugioh.md` — official Yu-Gi-Oh! counting rules with sources; `SPEC.md` must not contradict them.
+- `docs/design/LPCounter.figcraft` — FigCraft design file (components, interactive prototype, responsive board, and the "Stile LED" page: palettes, the Tubes style, icon proposals, screens). Icon PNGs in `docs/design/icon/`. The app icon is `ios/LPCounter/Resources/LPCounterAppIcon.icon` (Icon Composer): two layers, `Lattice.png` (back) and `LP.png` (front, with specular and shadow), exported from FigCraft; `docs/design/icon/renditions.png` shows default, dark, tinted and clear.
 
 ## Parity rule
 

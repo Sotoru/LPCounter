@@ -16,7 +16,7 @@ struct GameWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             GameWidgetEntryView(entry: entry)            
         }
-        .supportedFamilies([.systemSmall])
+        .supportedFamilies([.systemSmall, .systemMedium])
         #if os(iOS)
         .supportedMountingStyles([.elevated])
         #endif

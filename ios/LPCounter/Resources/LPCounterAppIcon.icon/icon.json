@@ -1,47 +1,52 @@
 {
-  "fill" : "system-light",
+  "fill" : {
+    "solid" : "srgb:0.00000,0.00000,0.00000,1.00000"
+  },
+  "fill-specializations" : [
+    {
+      "appearance" : "dark",
+      "value" : {
+        "solid" : "srgb:0.00000,0.00000,0.00000,1.00000"
+      }
+    }
+  ],
   "groups" : [
     {
-      "blur-material" : 0.5,
-      "hidden" : false,
       "layers" : [
         {
-          "blend-mode" : "normal",
-          "fill" : {
-            "automatic-gradient" : "extended-gray:0.50000,1.00000",
-            "orientation" : {
-              "start" : {
-                "x" : 0.5,
-                "y" : 0
-              },
-              "stop" : {
-                "x" : 0.5,
-                "y" : 0.7
-              }
-            }
-          },
           "glass" : false,
-          "image-name" : "20251104_1104_Rana Fantasy Iconica_remix_01k9754qndf6ht8qmyw4mvc0hw.png",
-          "name" : "20251104_1104_Rana Fantasy Iconica_remix_01k9754qndf6ht8qmyw4mvc0hw",
-          "opacity" : 1,
-          "position" : {
-            "scale" : 1.8,
-            "translation-in-points" : [
-              100,
-              180
-            ]
-          }
+          "image-name" : "LP.png",
+          "name" : "LP"
         }
       ],
-      "lighting" : "individual",
+      "name" : "Letters",
       "shadow" : {
-        "kind" : "layer-color",
+        "kind" : "neutral",
         "opacity" : 0.5
       },
       "specular" : true,
       "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
+        "enabled" : false,
+        "value" : 0
+      }
+    },
+    {
+      "layers" : [
+        {
+          "glass" : false,
+          "image-name" : "Lattice.png",
+          "name" : "Lattice"
+        }
+      ],
+      "name" : "Lattice",
+      "shadow" : {
+        "kind" : "none",
+        "opacity" : 0
+      },
+      "specular" : false,
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0
       }
     }
   ],

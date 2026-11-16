@@ -15,19 +15,15 @@ struct FirstPlayerWidget: Widget {
     
     let kind: String = "FirstPlayerWidget"
     
-    @Environment(\.widgetFamily) var widgetFamily
-    
-    
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: FirstPlayerProvider()) { entry in
             WidgetView(entry: entry)
-                .containerBackground(.white.gradient, for: .widget)
         }
         #if os(iOS)
-        .supportedFamilies([.systemSmall, .systemLarge, .accessoryInline, .accessoryCircular, .accessoryRectangular])
+        .supportedFamilies([.systemSmall, .systemMedium, .accessoryInline, .accessoryCircular, .accessoryRectangular])
         .supportedMountingStyles([.elevated])
         #else
-        .supportedFamilies([.systemSmall, .systemLarge])
+        .supportedFamilies([.systemSmall, .systemMedium])
         #endif
         .configurationDisplayName("LPCounter Player 1")
         .description("Add or subtract LP for Player 1")

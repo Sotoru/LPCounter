@@ -24,4 +24,41 @@
     <string name="channel_live_score">Live score</string>
     <string name="live_score_title">Life points</string>
     <string name="live_score_text" translatable="false">P1 %1$d  ·  P2 %2$d</string>
+
+    <string name="action_new_duel">New duel</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="reset_confirm_title">Reset the duel?</string>
+    <string name="reset_confirm_text">Life points go back to the starting value. The history is kept.</string>
+    <string name="result_winner">Winner</string>
+    <string name="result_defeated">Defeated</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_duel_in_progress">Duel in progress</string>
+    <string name="settings_confirm_reset">Confirm before resetting</string>
+    <string name="settings_confirm_reset_hint">↺ asks for confirmation</string>
+    <string name="settings_auto_end">End duel automatically</string>
+    <string name="settings_auto_end_hint">Shows who wins when life points reach 0</string>
+    <string name="settings_haptics">Haptics</string>
+    <string name="settings_haptics_hint">Feedback on every life point change</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="settings_starting_lp">Starting life points</string>
+    <string name="settings_starting_lp_hint">Speed Duel: 4000. Applies now if the duel hasn\'t started, otherwise at the next reset.</string>
+    <string name="tab_home">Home</string>
+    <string name="action_play">Play</string>
+    <string name="settings_timer">Timer</string>
+    <string name="settings_timer_hint">Tournament round. Keeps running across duels until it ends.</string>
+    <string name="timer_off">Off</string>
+    <string name="timer_minutes">%1$d min</string>
+    <string name="home_section_recent">Recent duels</string>
+    <string name="no_recent_duels">No recent duels</string>
+    <string name="duel_row" translatable="false">LP1 %1$d · LP2 %2$d</string>
+    <string name="settings_section_duel">Duel</string>
+    <string name="settings_section_data">Data</string>
+    <string name="settings_clear_data">Delete all data</string>
+    <string name="settings_clear_data_hint">Life points, history, recent duels and timer. Settings are kept.</string>
+    <string name="clear_confirm_title">Delete all data?</string>
+    <string name="action_delete">Delete</string>
 </resources>

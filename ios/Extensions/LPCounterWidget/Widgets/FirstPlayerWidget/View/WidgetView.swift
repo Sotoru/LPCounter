@@ -1,59 +1,56 @@
 //
 //  WidgetView.swift
-//  WidgetKitCourse WidgetExtension
-//
-//  Created by Florian Schweizer on 06.12.21.
+//  LPCounterWidgetExtension
 //
 
-import WidgetKit
 import SwiftUI
+import WidgetKit
 
+/// Player 1 widget for every family: Home Screen with buttons, Lock Screen read only.
 struct WidgetView: View {
     var entry: FirstPlayerEntry
+    @Environment(\.widgetFamily) private var widgetFamily
 
-    
-    @Environment(\.widgetFamily) var widgetFamily
-    @Environment(\.colorScheme) private var colorScheme
-    
     var body: some View {
-        widgetContent
-            .containerBackground(for: .widget) {
-                colorScheme == .dark ? Color.black : Color.white
-            }
-    }
-    
-    @ViewBuilder
-    private var widgetContent: some View {
         switch widgetFamily {
-            //            case .systemMedium:
-            //                MediumSizeView(entry: entry)
-            
-        case .systemSmall:
+        case .systemSmall, .systemMedium:
             SmallSizeView(entry: entry)
-            
-        case .systemLarge:
-            LargeSizeView(entry: entry)
-            
+                .buttonStyle(.bordered)
+                .buttonBorderShape(.capsule)
+                .lpWidgetBackground()
+
         case .accessoryInline:
-            Text("LP P1 \(entry.lifePointP1)")
-            
-            //update this
+            Label {
+                Text(verbatim: "LP1 \(entry.lifePointP1)")
+            } icon: {
+                Image(systemName: "heart.fill")
+            }
+            .containerBackground(for: .widget) { Color.clear }
+
         case .accessoryCircular:
-            Gauge(value: 0.7) {
-                Text("LP P1 \(entry.lifePointP1)")
+            Gauge(value: Double(entry.lifePointP1), in: 0...Double(max(entry.lifePointP1, WidgetStyle.startingLifePoints))) {
+                Text(verbatim: "LP1")
+            } currentValueLabel: {
+                Text(verbatim: entry.lifePointP1 >= 10_000 ? "\(entry.lifePointP1 / 1000)k" : "\(entry.lifePointP1)")
+                    .font(LED.segmentFont(11))
             }
-            .gaugeStyle(.accessoryCircular)
-            
-            //update this
+            .gaugeStyle(.accessoryCircularCapacity)
+            .containerBackground(for: .widget) { AccessoryWidgetBackground() }
+
         case .accessoryRectangular:
-            Gauge(value: 0.7) {
-                Text("LP P1 \(entry.lifePointP1)")
+            VStack(alignment: .leading, spacing: 2) {
+                Text(verbatim: "LP1").led(12, color: .secondary, glow: false)
+                Text(verbatim: String(entry.lifePointP1))
+                    .font(LED.segmentFont(22, relativeTo: .title2))
+                    .widgetAccentable()
+                Gauge(value: min(1, Double(entry.lifePointP1) / Double(max(1, WidgetStyle.startingLifePoints)))) { EmptyView() }
+                    .gaugeStyle(.accessoryLinearCapacity)
             }
-            .gaugeStyle(.accessoryLinear)
-            
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .containerBackground(for: .widget) { Color.clear }
+
         default:
-            Text("Not implemented!")
+            EmptyView()
         }
     }
 }
-
