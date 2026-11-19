@@ -3,57 +3,54 @@ package it.sotoru.lpcounter.widget
 import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
-import androidx.glance.GlanceTheme
+import androidx.glance.Image
+import androidx.glance.ImageProvider
+import androidx.glance.LocalSize
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.provideContent
-import androidx.glance.background
-import androidx.glance.layout.Alignment
-import androidx.glance.layout.Column
-import androidx.glance.layout.Spacer
+import androidx.glance.layout.ContentScale
 import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.height
-import androidx.glance.layout.padding
-import androidx.glance.text.FontWeight
-import androidx.glance.text.Text
-import androidx.glance.text.TextStyle
 import it.sotoru.lpcounter.MainActivity
 import it.sotoru.lpcounter.R
 import it.sotoru.lpcounter.data.LifePoints
-import it.sotoru.lpcounter.gameRepository
-import kotlinx.coroutines.flow.first
+import it.sotoru.lpcounter.ui.led.Led
+import it.sotoru.lpcounter.ui.led.LedLook
+import it.sotoru.lpcounter.ui.led.dim
+import it.sotoru.lpcounter.ui.led.lit
 
-/** Read-only preview of both scores. */
+/** Both totals on the LED matrix, read only; a tap opens the app (SPEC §6). LP2 above, LP1 below, like the board. */
 class GameWidget : GlanceAppWidget() {
+    override val sizeMode = SizeMode.Exact
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val lp = context.gameRepository.lifePoints.first()
-        provideContent { GlanceTheme { Content(context, lp) } }
+        val lp = context.lifePoints()
+        val look = context.ledLook()
+        provideContent { Content(context, lp, look) }
     }
 
     @Composable
-    private fun Content(context: Context, lp: LifePoints) {
-        val text = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 20.sp)
-        val value = text.copy(fontSize = 28.sp, fontWeight = FontWeight.Bold)
-        Column(
-            modifier = GlanceModifier.fillMaxSize()
-                .background(GlanceTheme.colors.widgetBackground)
-                .padding(8.dp)
-                .clickable(actionStartActivity(Intent(context, MainActivity::class.java))),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(context.getString(R.string.lp_label, 2), style = text)
-            Text(lp.two.toString(), style = value)
-            Spacer(GlanceModifier.height(12.dp))
-            Text(context.getString(R.string.lp_label, 1), style = text)
-            Text(lp.one.toString(), style = value)
+    private fun Content(context: Context, lp: LifePoints, look: LedLook) {
+        val bitmap = context.widgetBitmap(LocalSize.current, look) {
+            // Two halves, each a label and its total, centred in its half.
+            val half = rows / 2
+            listOf(2 to lp.two, 1 to lp.one).forEachIndexed { i, (player, value) ->
+                val top = i * half + (half - 7 - 2 - 21) / 2
+                text("LP$player", top.coerceAtLeast(1), look.dim)
+                text(value.toString().padStart(4), top + 9, if (value == 0) Led.red else look.lit, maxScale = 3)
+            }
         }
+        Image(
+            ImageProvider(bitmap),
+            context.getString(R.string.widget_game_content, lp.one, lp.two),
+            GlanceModifier.fillMaxSize().clickable(actionStartActivity(Intent(context, MainActivity::class.java))),
+            contentScale = ContentScale.FillBounds,
+        )
     }
 }
 

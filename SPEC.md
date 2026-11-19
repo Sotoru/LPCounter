@@ -126,17 +126,17 @@ Ogni voce ha un'icona e una riga di spiegazione; sotto ogni gruppo una nota (es.
 
 | Elemento | iOS (Apple) | Android (Google) |
 |---|---|---|
-| Contatore/cronologia | Pulsante nell'intestazione della carta | `HorizontalPager` + indicatore a punti (da allineare) |
+| Contatore/cronologia | Pulsante accanto ad Annulla e Dimezza | Pulsante accanto ad Annulla e Dimezza (`AnimatedContent`) |
 | Foglio calcolatrice | `.sheet` | `ModalBottomSheet` |
 | Conferma azzeramento | `confirmationDialog` | `AlertDialog` |
-| Impostazioni dalla Home | `.sheet` + `NavigationStack` | — (da allineare) |
+| Impostazioni dalla Home | `.sheet` + `NavigationStack` | Schermata a tutto schermo con `TopAppBar` |
 | Pila Home → Partita | `NavigationStack` (barre nascoste in partita) | `AnimatedContent` + `BackHandler` |
-| Home, Impostazioni | `Form` (`Toggle`, `Picker` `.segmented`) | `LazyColumn`/lista con `Switch` e `SingleChoiceSegmentedButtonRow` |
+| Home, Impostazioni | `Form` (`Toggle`, `Picker` `.segmented`) | Lista con `ListItem`, `Switch`, `DropdownMenu` e `SingleChoiceSegmentedButtonRow` |
 | Timer | `Text(timerInterval:)` | `Text` aggiornato ogni secondo |
 | Pulsanti | Liquid Glass (`glassEffect`) | Material 3 Expressive (`FilledIconButton`) |
 | Lista cronologia | `List` | `LazyColumn` + `ListItem` |
-| Widget | WidgetKit + App Intents | Glance |
-| Punteggio live | Live Activity | Notifica ongoing |
+| Widget | WidgetKit + App Intents | Glance (matrice disegnata come immagine) |
+| Punteggio live | Live Activity | Notifica ongoing (`BigPictureStyle` con la matrice) |
 | Persistenza | App Group `UserDefaults` | Jetpack DataStore |
 | Lingue | en, it | en, it |
 
@@ -165,16 +165,12 @@ I controlli restano nativi e seguono il sistema; tutto il resto segue lo stile L
 
 ## Divergenze da chiudere
 
-Android è il riferimento (§2). iOS è allineato a §1–§7, escluse le voci qui sotto (stesse regole in `PlayerScore` e `CalculatorState`, stessi
+Le due app sono allineate a §1–§10 (stesse regole in `PlayerScore` / `GameRepository` e `CalculatorState`, stessi
 esempi di §3 nei test di entrambe le app, stesse lingue `en` e `it`). Resta:
 
 0. ℹ️ **LP iniziali e superfici esterne:** su Android widget e notifica leggono gli LP iniziali dallo stesso DataStore; su iOS widget e Live Activity usano ancora 8000 come valore di riserva se non c'è un totale salvato (caso raro: l'app salva sempre i totali).
 
-3. ⚠️ **Scorrimento sul totale (§4), pagine solo dall'indicatore e niente pulsante Azzera giocatore:** solo iOS; Android ha ancora il pager scorrevole.
-
-2. ⚠️ **Stile LED (§10), Home senza tab con frase che si scrive (§9), Stile pixel al posto di Tema (§5):** solo iOS. Android ha ancora il tema e l'aspetto precedente, anche per widget e notifica.
-
-4. ⚠️ **Azzera partita svuota la cronologia (§2):** solo iOS; Android la mantiene ancora.
+2. ℹ️ **Widget Android:** Glance non disegna su canvas, quindi la matrice è un'immagine generata a ogni aggiornamento; niente widget per la schermata di blocco (Android non li ha).
 
 5. ℹ️ **App Apple Watch (§6b):** solo iOS; Android potrebbe avere un'app Wear OS, non prevista.
 

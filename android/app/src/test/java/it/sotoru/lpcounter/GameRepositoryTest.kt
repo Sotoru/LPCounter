@@ -5,7 +5,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import it.sotoru.lpcounter.data.Duel
 import it.sotoru.lpcounter.data.GameRepository
 import it.sotoru.lpcounter.data.INITIAL_LIFE_POINTS
 import it.sotoru.lpcounter.data.LifePoints
@@ -90,11 +89,13 @@ class GameRepositoryTest {
         assertEquals(listOf(-300), history(Player.Two))
     }
 
-    @Test fun resetGameKeepsHistory() = runBlocking {
+    @Test fun resetGameClearsBothHistories() = runBlocking {
         repo.update(Player.One) { it - 500 }
+        repo.update(Player.Two) { it - 300 }
         repo.reset()
         assertEquals(LifePoints(), game().lifePoints)
-        assertEquals(listOf(-500), history(Player.One))
+        assertEquals(emptyList<Int>(), history(Player.One))
+        assertEquals(emptyList<Int>(), history(Player.Two))
     }
 
     @Test fun historyIsBounded() = runBlocking {
@@ -139,16 +140,6 @@ class GameRepositoryTest {
         assertEquals(listOf(7500, 8000, 8000), notified.map { it.one })
     }
 
-    @Test fun resetSavesPlayedDuelsNewestFirst() = runBlocking {
-        repo.reset()  // untouched duel: not saved
-        repo.update(Player.One) { it - 8000 }
-        repo.reset()
-        clock += 1
-        repo.update(Player.Two) { it - 500 }
-        repo.reset()
-        assertEquals(listOf(Duel(clock, 8000, 7500), Duel(clock - 1, 0, 8000)), game().duels)
-    }
-
     @Test fun startDuelStartsTimerOnlyWhenNoneIsRunning() = runBlocking {
         repo.startDuel()
         assertEquals(null, game().timerEndsAt)
@@ -167,6 +158,38 @@ class GameRepositoryTest {
         assertEquals(null, game().timerEndsAt)
     }
 
+    @Test fun timerLengthIsClampedAndOffRemovesTheTimer() = runBlocking {
+        repo.setTimerMinutes(500)
+        assertEquals(180, game().timerMinutes)
+        repo.setTimerMinutes(-3)
+        assertEquals(1, game().timerMinutes)
+        repo.startDuel()
+        assertEquals(true, game().hasTimer)
+        repo.setTimerMinutes(0)
+        assertEquals(false, game().hasTimer)
+    }
+
+    @Test fun pauseKeepsTheTimeLeftAndOnlyRemoveDeletesIt() = runBlocking {
+        repo.setTimerMinutes(45)
+        repo.startDuel()
+        clock += 600_000
+        repo.pauseTimer()
+        assertEquals(null, game().timerEndsAt)
+        assertEquals(35 * 60_000L, game().timerPausedRemaining)
+
+        clock += 3_600_000  // a paused timer does not run down
+        repo.startDuel()  // Play resumes it instead of starting over
+        assertEquals(clock + 35 * 60_000L, game().timerEndsAt)
+
+        repo.pauseTimer()
+        repo.resumeTimer()
+        assertEquals(clock + 35 * 60_000L, game().timerEndsAt)
+
+        repo.removeTimer()
+        assertEquals(false, game().hasTimer)
+        assertEquals(45, game().timerMinutes)
+    }
+
     @Test fun clearAllKeepsStartingLifePoints() = runBlocking {
         repo.setStartingLifePoints(4000)
         repo.setTimerMinutes(50)
@@ -177,7 +200,6 @@ class GameRepositoryTest {
         val g = game()
         assertEquals(LifePoints(4000, 4000), g.lifePoints)
         assertEquals(emptyList<Int>(), g.history.getValue(Player.One))
-        assertEquals(emptyList<Duel>(), g.duels)
         assertEquals(null, g.timerEndsAt)
         assertEquals(50, g.timerMinutes)
     }

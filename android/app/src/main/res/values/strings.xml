@@ -1,64 +1,109 @@
 <resources>
     <string name="app_name" translatable="false">LPCounter</string>
 
-    <string name="lp_label" translatable="false">LP%1$d</string>
+    <string name="player_name" translatable="false">Player %1$d</string>
+    <string name="player_life_points">Player %1$d life points</string>
+    <string name="player_wins">Player %1$d wins</string>
     <string name="no_history">No history</string>
 
-    <string name="action_reset_player">Reset life points</string>
     <string name="action_undo">Undo</string>
     <string name="action_halve">Halve life points</string>
+    <string name="action_show_history">History</string>
+    <string name="action_show_total">Life points</string>
     <string name="action_reset_game">Reset game</string>
+    <string name="action_new_duel">New duel</string>
     <string name="action_close">Close</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_done">Done</string>
+    <string name="action_delete">Delete</string>
     <string name="action_open_calculator">Edit life points</string>
     <string name="action_clear_input">Clear input</string>
-    <string name="action_toggle_operation">Switch between add and subtract</string>
     <string name="action_submit">Apply</string>
     <string name="action_add">Add</string>
     <string name="action_subtract">Subtract</string>
+    <string name="action_add_1000">Add 1000</string>
+    <string name="action_subtract_1000">Subtract 1000</string>
+    <string name="action_resume">Resume</string>
+    <string name="action_resume_later">Resume later</string>
+    <string name="action_end_duel">End duel</string>
+
+    <string name="calc_total">%1$d life points</string>
+    <string name="calc_add">add %1$d</string>
+    <string name="calc_subtract">subtract %1$d</string>
+    <string name="calc_result">result %1$d</string>
+
+    <string name="home_catchphrase" translatable="false">It\'s time to duel</string>
+    <string name="tab_home">Home</string>
+
+    <string name="leave_title">Leave the duel?</string>
+    <string name="leave_text">Keep it to pick up from the Home, or end it now.</string>
+    <string name="reset_confirm_title">Reset the duel?</string>
+    <string name="reset_confirm_text">Life points go back to the starting value and the history is cleared.</string>
+    <string name="result_winner">Winner</string>
+    <string name="result_defeated">Defeated</string>
+
+    <string name="chance_die">Roll a die</string>
+    <string name="chance_coin">Flip a coin</string>
+    <string name="chance_heads">Heads</string>
+    <string name="chance_tails">Tails</string>
+    <string name="chance_again">Again</string>
+
+    <string name="timer_off">Off</string>
+    <string name="timer_minutes">%1$d min</string>
+    <string name="timer_custom">Custom…</string>
+    <string name="timer_title">Timer</string>
+    <string name="timer_shorter">5 minutes less</string>
+    <string name="timer_longer">5 minutes more</string>
+    <string name="timer_remove">Remove timer</string>
+    <string name="timer_pause">Pause timer</string>
+    <string name="timer_resume">Resume timer</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_duel">Duel</string>
+    <string name="settings_starting_lp">Starting life points</string>
+    <string name="speed_duel_option">4000 · Speed Duel</string>
+    <string name="settings_timer">Round timer</string>
+    <string name="settings_auto_end">End duel automatically</string>
+    <string name="settings_auto_end_hint">At 0 life points: who wins, and New duel in place of reset</string>
+    <string name="settings_duel_footer">A new starting value applies now if the duel hasn\'t started, otherwise at the next reset. The timer starts with Play.</string>
+    <string name="settings_section_duel_screen">Duel screen</string>
+    <string name="settings_confirm_reset">Confirm before resetting</string>
+    <string name="settings_confirm_reset_hint">↺ asks before both totals go back</string>
+    <string name="settings_haptics">Haptics</string>
+    <string name="settings_haptics_hint">A tap on every life point change</string>
+    <string name="settings_dim">Dim screen</string>
+    <string name="settings_dim_hint">Saves battery when idle</string>
+    <string name="dim_never">Never</string>
+    <string name="dim_seconds">%1$d s</string>
+    <string name="settings_duel_screen_footer">The screen stays on during a duel. Swipe on a total: right/left ±100, up/down ±1000.</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_palette">Colour</string>
+    <string name="settings_pixels">Pixel style</string>
+    <string name="settings_appearance_footer">Colour and dot shape, also in widgets and the live score.</string>
+    <string name="palette_night">Night blue</string>
+    <string name="palette_ice">Ice</string>
+    <string name="palette_frost">Frost</string>
+    <string name="palette_cyan">Cyan</string>
+    <string name="palette_amber">Amber</string>
+    <string name="pixel_round">Round</string>
+    <string name="pixel_diamond">Diamond</string>
+    <string name="pixel_square">Square</string>
+    <string name="settings_section_data">Data</string>
+    <string name="settings_clear_data">Delete all data</string>
+    <string name="settings_clear_data_hint">Life points, history and timer. Settings are kept.</string>
+    <string name="clear_confirm_title">Delete all data?</string>
+    <string name="settings_section_about">About</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_fonts">Fonts</string>
 
     <string name="widget_game_name">Game</string>
     <string name="widget_game_description">Preview of the current game</string>
+    <string name="widget_game_content">Player 1 %1$d, Player 2 %2$d</string>
     <string name="widget_first_player_name">LPCounter Player 1</string>
     <string name="widget_first_player_description">Add or subtract LP for Player 1</string>
+    <string name="widget_first_player_content">Player 1 %1$d life points</string>
 
     <string name="channel_live_score">Live score</string>
     <string name="live_score_title">Life points</string>
     <string name="live_score_text" translatable="false">P1 %1$d  ·  P2 %2$d</string>
-
-    <string name="action_new_duel">New duel</string>
-    <string name="action_cancel">Cancel</string>
-    <string name="reset_confirm_title">Reset the duel?</string>
-    <string name="reset_confirm_text">Life points go back to the starting value. The history is kept.</string>
-    <string name="result_winner">Winner</string>
-    <string name="result_defeated">Defeated</string>
-    <string name="settings_title">Settings</string>
-    <string name="settings_section_duel_in_progress">Duel in progress</string>
-    <string name="settings_confirm_reset">Confirm before resetting</string>
-    <string name="settings_confirm_reset_hint">↺ asks for confirmation</string>
-    <string name="settings_auto_end">End duel automatically</string>
-    <string name="settings_auto_end_hint">Shows who wins when life points reach 0</string>
-    <string name="settings_haptics">Haptics</string>
-    <string name="settings_haptics_hint">Feedback on every life point change</string>
-    <string name="settings_section_appearance">Appearance</string>
-    <string name="settings_theme">Theme</string>
-    <string name="theme_system">System</string>
-    <string name="theme_light">Light</string>
-    <string name="theme_dark">Dark</string>
-    <string name="settings_starting_lp">Starting life points</string>
-    <string name="settings_starting_lp_hint">Speed Duel: 4000. Applies now if the duel hasn\'t started, otherwise at the next reset.</string>
-    <string name="tab_home">Home</string>
-    <string name="action_play">Play</string>
-    <string name="settings_timer">Timer</string>
-    <string name="settings_timer_hint">Tournament round. Keeps running across duels until it ends.</string>
-    <string name="timer_off">Off</string>
-    <string name="timer_minutes">%1$d min</string>
-    <string name="home_section_recent">Recent duels</string>
-    <string name="no_recent_duels">No recent duels</string>
-    <string name="duel_row" translatable="false">LP1 %1$d · LP2 %2$d</string>
-    <string name="settings_section_duel">Duel</string>
-    <string name="settings_section_data">Data</string>
-    <string name="settings_clear_data">Delete all data</string>
-    <string name="settings_clear_data_hint">Life points, history, recent duels and timer. Settings are kept.</string>
-    <string name="clear_confirm_title">Delete all data?</string>
-    <string name="action_delete">Delete</string>
 </resources>

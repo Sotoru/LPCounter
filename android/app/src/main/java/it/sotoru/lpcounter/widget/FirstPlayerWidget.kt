@@ -2,13 +2,12 @@ package it.sotoru.lpcounter.widget
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.glance.Button
+import androidx.glance.ButtonDefaults
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
-import androidx.glance.GlanceTheme
+import androidx.glance.Image
+import androidx.glance.ImageProvider
 import androidx.glance.LocalSize
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.actionParametersOf
@@ -17,69 +16,82 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.components.FilledButton
 import androidx.glance.appwidget.provideContent
-import androidx.glance.background
+import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Alignment
-import androidx.glance.layout.Column
+import androidx.glance.layout.Box
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
+import androidx.glance.layout.ContentScale
 import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.height
+import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
-import androidx.glance.text.FontWeight
-import androidx.glance.text.Text
-import androidx.glance.text.TextStyle
+import androidx.glance.semantics.contentDescription
+import androidx.glance.semantics.semantics
 import it.sotoru.lpcounter.R
 import it.sotoru.lpcounter.data.Player
 import it.sotoru.lpcounter.gameRepository
-import kotlinx.coroutines.flow.first
+import it.sotoru.lpcounter.ui.led.Led
+import it.sotoru.lpcounter.ui.led.LedLook
+import it.sotoru.lpcounter.ui.led.dim
+import it.sotoru.lpcounter.ui.led.lit
 
 private const val STEP = 1000
 private val DeltaKey = ActionParameters.Key<Int>("delta")
-private val Small = DpSize(110.dp, 110.dp)
-private val Large = DpSize(250.dp, 250.dp)
+/** Room for the − / + row under the total. */
+private val ButtonsHeight = 52.dp
 
-/** Player 1 score with interactive -/+ buttons. */
+/** Player 1's total on the matrix with − / + 1000 (SPEC §6), through the same rules as the app. */
 class FirstPlayerWidget : GlanceAppWidget() {
-    override val sizeMode = SizeMode.Responsive(setOf(Small, Large))
+    override val sizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val lp = context.gameRepository.lifePoints.first().one
-        provideContent { GlanceTheme { Content(context, lp) } }
+        val lp = context.lifePoints().one
+        val look = context.ledLook()
+        provideContent { Content(context, lp, look) }
     }
 
     @Composable
-    private fun Content(context: Context, lp: Int) {
-        val large = LocalSize.current.height >= Large.height
-        val color = GlanceTheme.colors.onSurface
-        Column(
-            modifier = GlanceModifier.fillMaxSize()
-                .background(GlanceTheme.colors.widgetBackground)
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                context.getString(R.string.lp_label, 1),
-                style = TextStyle(color = color, fontSize = if (large) 28.sp else 20.sp, fontWeight = FontWeight.Bold),
+    private fun Content(context: Context, lp: Int, look: LedLook) {
+        val size = LocalSize.current
+        val bitmap = context.widgetBitmap(size, look) {
+            val free = rows - (ButtonsHeight.value / 3).toInt()
+            val top = ((free - 9 - 21) / 2).coerceAtLeast(1)
+            text("LP1", top, look.dim)
+            text(lp.toString().padStart(4), top + 9, if (lp == 0) Led.red else look.lit, maxScale = 3)
+        }
+        Box(GlanceModifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+            Image(
+                ImageProvider(bitmap),
+                context.getString(R.string.widget_first_player_content, lp),
+                GlanceModifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds,
             )
-            Text(lp.toString(), style = TextStyle(color = color, fontSize = if (large) 48.sp else 28.sp))
-            Spacer(GlanceModifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Button(
-                    text = "−",
-                    onClick = actionRunCallback<ChangeLifePointsAction>(actionParametersOf(DeltaKey to -STEP)),
-                )
+            Row(GlanceModifier.fillMaxWidth().padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Step("−", -STEP, Led.red, GlanceModifier.defaultWeight().description(context.getString(R.string.action_subtract_1000)))
                 Spacer(GlanceModifier.width(8.dp))
-                Button(
-                    text = "+",
-                    onClick = actionRunCallback<ChangeLifePointsAction>(actionParametersOf(DeltaKey to STEP)),
-                )
+                Step("+", STEP, Led.green, GlanceModifier.defaultWeight().description(context.getString(R.string.action_add_1000)))
             }
         }
     }
+
+    @Composable
+    private fun Step(sign: String, delta: Int, color: androidx.compose.ui.graphics.Color, modifier: GlanceModifier) {
+        FilledButton(
+            text = sign,
+            onClick = actionRunCallback<ChangeLifePointsAction>(actionParametersOf(DeltaKey to delta)),
+            modifier = modifier,
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = ColorProvider(color, color),
+                contentColor = ColorProvider(Led.background, Led.background),
+            ),
+        )
+    }
 }
+
+private fun GlanceModifier.description(text: String) = semantics { contentDescription = text }
 
 class ChangeLifePointsAction : ActionCallback {
     override suspend fun onAction(context: Context, glanceId: GlanceId, parameters: ActionParameters) {

@@ -2,6 +2,7 @@ package it.sotoru.lpcounter
 
 import it.sotoru.lpcounter.feature.game.CalculatorState
 import it.sotoru.lpcounter.feature.game.Operation
+import it.sotoru.lpcounter.feature.game.swipeDelta
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -25,5 +26,12 @@ class CalculatorStateTest {
         assertEquals(0, type(9, 9).applyTo(8000))
         assertEquals(8500, type(5).toggleOperation().applyTo(8000))
         assertEquals(Operation.Decrease, CalculatorState().operation)
+    }
+
+    @Test fun swipeChangesByAxis() {
+        assertEquals(100, swipeDelta(80f, 10f))
+        assertEquals(-100, swipeDelta(-80f, -10f))
+        assertEquals(1000, swipeDelta(10f, -80f))
+        assertEquals(-1000, swipeDelta(-10f, 80f))
     }
 }

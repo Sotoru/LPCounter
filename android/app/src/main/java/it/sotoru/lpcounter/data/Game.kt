@@ -5,11 +5,9 @@ const val INITIAL_LIFE_POINTS = 8000
 /** Starting life points the user can pick (SPEC §5): standard and Speed Duel. */
 val STARTING_LIFE_POINTS_OPTIONS = listOf(INITIAL_LIFE_POINTS, 4000)
 
-/** Timer choices in minutes (SPEC §9): off, or a 50-minute tournament round. */
-val TIMER_OPTIONS = listOf(0, 50)
-
-/** A finished duel (SPEC §1): when it ended and both final totals. */
-data class Duel(val endedAt: Long, val one: Int, val two: Int)
+/** Timer presets in minutes (SPEC §9); any other length in [TIMER_RANGE] can be set by hand. */
+val TIMER_PRESETS = listOf(45, 50)
+val TIMER_RANGE = 1..180
 
 enum class Player(val number: Int) { One(1), Two(2) }
 
@@ -25,12 +23,18 @@ data class GameState(
     val lifePoints: LifePoints,
     val history: Map<Player, List<Int>>,
     val startingLifePoints: Int = INITIAL_LIFE_POINTS,
-    /** Newest first. */
-    val duels: List<Duel> = emptyList(),
     val timerMinutes: Int = 0,
-    /** Epoch millis the running round ends at; null when no timer was started. */
+    /** Epoch millis the running round ends at; null when no timer runs. */
     val timerEndsAt: Long? = null,
+    /** Millis left while the timer is paused; null when it runs or there is none. */
+    val timerPausedRemaining: Long? = null,
 ) {
     /** The duel is over when a player has no life points left (SPEC §4). */
     val isOver: Boolean get() = lifePoints.one == 0 || lifePoints.two == 0
+
+    /** Some life points changed since the duel started (SPEC §9). */
+    val inProgress: Boolean get() = lifePoints != LifePoints(startingLifePoints, startingLifePoints)
+
+    /** A timer exists for this duel, running or paused. */
+    val hasTimer: Boolean get() = timerEndsAt != null || timerPausedRemaining != null
 }

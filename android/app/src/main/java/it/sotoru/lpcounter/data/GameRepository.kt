@@ -9,10 +9,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.glance.appwidget.updateAll
-import it.sotoru.lpcounter.notification.LiveScoreNotifier
-import it.sotoru.lpcounter.widget.FirstPlayerWidget
-import it.sotoru.lpcounter.widget.GameWidget
+import it.sotoru.lpcounter.widget.refreshSurfaces
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -23,13 +20,13 @@ private val KeyP2 = intPreferencesKey("lifePointsP2")
 private val HistoryP1 = stringPreferencesKey("historyP1")
 private val HistoryP2 = stringPreferencesKey("historyP2")
 private val StartingLifePoints = intPreferencesKey("startingLifePoints")
+// Recent duels were dropped (SPEC §1): what an older version stored is removed on the next reset.
 private val Duels = stringPreferencesKey("recentDuels")
 private val TimerMinutes = intPreferencesKey("timerMinutes")
 private val TimerEndsAt = longPreferencesKey("timerEndsAt")
+private val TimerPaused = longPreferencesKey("timerPausedRemaining")
 
-// ponytail: bounded so the persisted string stays small; reset-game keeps history across games.
 private const val MAX_HISTORY = 200
-private const val MAX_DUELS = 100
 
 private val Player.lifeKey get() = if (this == Player.One) KeyP1 else KeyP2
 private val Player.historyKey get() = if (this == Player.One) HistoryP1 else HistoryP2
@@ -51,9 +48,9 @@ class GameRepository(
             prefs.toLifePoints(),
             Player.entries.associateWith { prefs.history(it) },
             prefs.starting,
-            prefs.duels(),
             prefs[TimerMinutes] ?: 0,
             prefs[TimerEndsAt],
+            prefs[TimerPaused],
         )
     }
 
@@ -88,16 +85,12 @@ class GameRepository(
         onChange(prefs.toLifePoints())
     }
 
-    /** Saves the duel to the recent ones if it was played, then resets both totals; history is left untouched. */
+    /** A new duel: both totals back to the start and both histories cleared (SPEC §2). */
     suspend fun reset() {
         val prefs = store.edit {
-            val lp = it.toLifePoints()
-            if (lp != LifePoints(it.starting, it.starting)) {
-                it[Duels] = (listOf(Duel(now(), lp.one, lp.two)) + it.duels()).take(MAX_DUELS)
-                    .joinToString(",") { d -> "${d.endedAt}:${d.one}:${d.two}" }
-            }
             it[KeyP1] = it.starting
             it[KeyP2] = it.starting
+            it.remove(HistoryP1); it.remove(HistoryP2); it.remove(Duels)
         }
         onChange(prefs.toLifePoints())
     }
@@ -115,31 +108,59 @@ class GameRepository(
         onChange(prefs.toLifePoints())
     }
 
-    suspend fun setTimerMinutes(value: Int) { store.edit { it[TimerMinutes] = value } }
+    /** Clamped to [TIMER_RANGE]; "off" (0) removes the timer at once, a new length waits for Play. */
+    suspend fun setTimerMinutes(value: Int) {
+        store.edit {
+            val minutes = if (value == 0) 0 else value.coerceIn(TIMER_RANGE)
+            it[TimerMinutes] = minutes
+            if (minutes == 0) it.removeTimer()
+        }
+    }
 
-    /** On Play (SPEC §9): starts a new round unless one is still running; "off" stops it. */
+    /** On Play (SPEC §9): a paused timer resumes, a running one continues, otherwise a new one starts; "off" removes it. */
     suspend fun startDuel() {
         store.edit {
             val minutes = it[TimerMinutes] ?: 0
             val endsAt = it[TimerEndsAt]
+            val paused = it[TimerPaused]
             when {
-                minutes == 0 -> it.remove(TimerEndsAt)
+                minutes == 0 -> it.removeTimer()
+                paused != null -> { it[TimerEndsAt] = now() + paused; it.remove(TimerPaused) }
                 endsAt == null || endsAt <= now() -> it[TimerEndsAt] = now() + minutes * 60_000L
             }
         }
     }
 
-    /** Totals, history, recent duels and timer; settings stay (SPEC §2). */
+    /** Freezes the countdown where it is; [resumeTimer] picks it up again. */
+    suspend fun pauseTimer() {
+        store.edit {
+            val endsAt = it[TimerEndsAt] ?: return@edit
+            it[TimerPaused] = (endsAt - now()).coerceAtLeast(0)
+            it.remove(TimerEndsAt)
+        }
+    }
+
+    suspend fun resumeTimer() {
+        store.edit {
+            val left = it[TimerPaused] ?: return@edit
+            it[TimerEndsAt] = now() + left
+            it.remove(TimerPaused)
+        }
+    }
+
+    /** Removes this duel's timer, running or paused; the chosen length stays for the next Play. */
+    suspend fun removeTimer() { store.edit { it.removeTimer() } }
+
+    /** Totals, history and timer; settings stay (SPEC §2). */
     suspend fun clearAll() {
         val prefs = store.edit {
             it.remove(KeyP1); it.remove(KeyP2); it.remove(HistoryP1); it.remove(HistoryP2)
-            it.remove(Duels); it.remove(TimerEndsAt)
+            it.remove(Duels); it.removeTimer()
         }
         onChange(prefs.toLifePoints())
     }
 
-    private fun Preferences.duels(): List<Duel> =
-        this[Duels]?.split(',')?.map { it.split(':') }?.map { (t, a, b) -> Duel(t.toLong(), a.toInt(), b.toInt()) }.orEmpty()
+    private fun MutablePreferences.removeTimer() { remove(TimerEndsAt); remove(TimerPaused) }
 
     private val Preferences.starting get() = this[StartingLifePoints] ?: INITIAL_LIFE_POINTS
 
@@ -156,9 +177,5 @@ class GameRepository(
 
 fun GameRepository(context: Context): GameRepository {
     val appContext = context.applicationContext
-    return GameRepository(appContext.dataStore) { lp ->
-        GameWidget().updateAll(appContext)
-        FirstPlayerWidget().updateAll(appContext)
-        LiveScoreNotifier.refresh(appContext, lp)
-    }
+    return GameRepository(appContext.dataStore) { refreshSurfaces(appContext) }
 }

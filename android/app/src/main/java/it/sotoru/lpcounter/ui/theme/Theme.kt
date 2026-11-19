@@ -1,34 +1,48 @@
 package it.sotoru.lpcounter.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.MotionScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import it.sotoru.lpcounter.data.AppTheme
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
+import it.sotoru.lpcounter.ui.led.Led
+import it.sotoru.lpcounter.ui.led.LedLook
+import it.sotoru.lpcounter.ui.led.LocalLed
 
-// Dynamic color needs Android 12 (S); minSdk is 30, so Android 11 falls back to the baseline scheme.
+/** Always dark (SPEC §10: no theme): black with the chosen LED colour as accent; controls stay Material. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun LPCounterTheme(theme: AppTheme = AppTheme.System, content: @Composable () -> Unit) {
-    val context = LocalContext.current
-    val dark = when (theme) {
-        AppTheme.System -> isSystemInDarkTheme()
-        AppTheme.Light -> false
-        AppTheme.Dark -> true
-    }
-    val colorScheme = when {
-        android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.S ->
-            if (dark) androidx.compose.material3.darkColorScheme() else androidx.compose.material3.lightColorScheme()
-        dark -> dynamicDarkColorScheme(context)
-        else -> dynamicLightColorScheme(context)
-    }
-    MaterialExpressiveTheme(
-        colorScheme = colorScheme,
-        motionScheme = MotionScheme.expressive(),
-        content = content,
+fun LPCounterTheme(look: LedLook = LedLook(), content: @Composable () -> Unit) {
+    val p = look.palette
+    val colorScheme = darkColorScheme(
+        primary = p.lit,
+        onPrimary = Color.Black,
+        primaryContainer = p.halo.copy(alpha = 0.35f).compositeOverBlack(),
+        onPrimaryContainer = p.lit,
+        secondaryContainer = p.unlit,
+        onSecondaryContainer = p.lit,
+        tertiary = Led.green,
+        error = Led.red,
+        onError = Color.Black,
+        errorContainer = Led.red.copy(alpha = 0.25f).compositeOverBlack(),
+        onErrorContainer = Led.red,
+        background = Led.background,
+        surface = Led.background,
+        surfaceContainerLowest = Led.background,
+        surfaceContainerLow = p.unlit,
+        surfaceContainer = p.unlit,
+        surfaceContainerHigh = p.unlit,
+        surfaceContainerHighest = p.unlit,
+        onSurface = p.lit,
+        onSurfaceVariant = p.lit.copy(alpha = 0.6f).compositeOverBlack(),
+        outline = p.lit.copy(alpha = 0.4f).compositeOverBlack(),
+        outlineVariant = p.lit.copy(alpha = 0.2f).compositeOverBlack(),
     )
+    CompositionLocalProvider(LocalLed provides look) {
+        MaterialExpressiveTheme(colorScheme = colorScheme, motionScheme = MotionScheme.expressive(), content = content)
+    }
 }
+
+private fun Color.compositeOverBlack() = Color(red * alpha, green * alpha, blue * alpha)

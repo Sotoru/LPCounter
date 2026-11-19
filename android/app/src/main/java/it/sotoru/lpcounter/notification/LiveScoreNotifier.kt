@@ -20,9 +20,16 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import it.sotoru.lpcounter.MainActivity
 import it.sotoru.lpcounter.R
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import it.sotoru.lpcounter.data.LifePoints
-import it.sotoru.lpcounter.gameRepository
-import kotlinx.coroutines.flow.first
+import it.sotoru.lpcounter.ui.led.Led
+import it.sotoru.lpcounter.ui.led.LedLook
+import it.sotoru.lpcounter.ui.led.lit
+import it.sotoru.lpcounter.widget.ledLook
+import it.sotoru.lpcounter.widget.lifePoints
+import it.sotoru.lpcounter.widget.widgetBitmap
 import kotlinx.coroutines.launch
 
 /** Android counterpart of the iOS Live Activity: an ongoing notification with both scores. */
@@ -30,18 +37,18 @@ object LiveScoreNotifier {
     private const val CHANNEL_ID = "live_score"
     private const val NOTIFICATION_ID = 1
 
-    fun show(context: Context, lp: LifePoints) = post(context, lp)
+    suspend fun show(context: Context) = post(context, context.lifePoints(), context.ledLook())
 
     /** Updates the notification only if it is currently showing. */
-    fun refresh(context: Context, lp: LifePoints) {
+    suspend fun refresh(context: Context) {
         val manager = context.getSystemService(NotificationManager::class.java)
-        if (manager.activeNotifications.any { it.id == NOTIFICATION_ID }) post(context, lp)
+        if (manager.activeNotifications.any { it.id == NOTIFICATION_ID }) show(context)
     }
 
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
 
     @SuppressLint("MissingPermission") // guarded by areNotificationsEnabled()
-    private fun post(context: Context, lp: LifePoints) {
+    private fun post(context: Context, lp: LifePoints, look: LedLook) {
         val manager = NotificationManagerCompat.from(context)
         if (!manager.areNotificationsEnabled()) return
 
@@ -62,6 +69,9 @@ object LiveScoreNotifier {
             .setContentTitle(context.getString(R.string.live_score_title))
             .setContentText(context.getString(R.string.live_score_text, lp.one, lp.two))
             .setContentIntent(open)
+            .setColor(look.lit.toArgb())
+            // Expanded, the totals on the LED matrix (SPEC §7); collapsed, the plain text above.
+            .setStyle(NotificationCompat.BigPictureStyle().bigPicture(matrix(context, lp, look)))
             .setOngoing(true)
             .setOnlyAlertOnce(true)
             .setCategory(NotificationCompat.CATEGORY_STATUS)
@@ -70,13 +80,21 @@ object LiveScoreNotifier {
     }
 }
 
+/** `LP·COUNTER` and both totals, Player 1 on the left like the landscape board. */
+private fun matrix(context: Context, lp: LifePoints, look: LedLook) =
+    context.widgetBitmap(DpSize(360.dp, 120.dp), look) {
+        text("LP·COUNTER", 3, look.lit, glow = true, align = 0.04f)
+        text(lp.one.toString(), 16, if (lp.one == 0) Led.red else look.lit, maxScale = 3, align = 0.04f)
+        text(lp.two.toString(), 16, if (lp.two == 0) Led.red else look.lit, maxScale = 3, align = 0.96f)
+    }
+
 /** Asks once for the notification permission (API 33+) and shows the ongoing score. */
 @Composable
 fun ShowLiveScore() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     fun show() {
-        scope.launch { LiveScoreNotifier.show(context, context.gameRepository.lifePoints.first()) }
+        scope.launch { LiveScoreNotifier.show(context) }
     }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { if (it) show() }
 
