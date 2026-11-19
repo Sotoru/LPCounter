@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive icon foreground: "LP" in seven segments with its halo. Same art as the iOS icon (LPCounterAppIcon.icon), redrawn as vectors. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+    <!-- Scaled into the 66 dp safe zone, so no launcher mask crops the letters. -->
+    <group android:scaleX="0.66" android:scaleY="0.66" android:pivotX="512" android:pivotY="512">
+        <path
+            android:pathData="M274,315L242,464 M225,539L192,689 M223,726L371,726 M622,315L590,464 M848,315L815,464 M573,539L540,689 M670,276L818,276 M620,501L768,501"
+            android:strokeColor="#3E6BFF"
+            android:strokeWidth="130"
+            android:strokeAlpha="0.10"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M274,315L242,464 M225,539L192,689 M223,726L371,726 M622,315L590,464 M848,315L815,464 M573,539L540,689 M670,276L818,276 M620,501L768,501"
+            android:strokeColor="#3E6BFF"
+            android:strokeWidth="95"
+            android:strokeAlpha="0.18"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M274,315L242,464 M225,539L192,689 M223,726L371,726 M622,315L590,464 M848,315L815,464 M573,539L540,689 M670,276L818,276 M620,501L768,501"
+            android:strokeColor="#3E6BFF"
+            android:strokeWidth="70"
+            android:strokeAlpha="0.35"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M274,315L242,464 M225,539L192,689 M223,726L371,726 M622,315L590,464 M848,315L815,464 M573,539L540,689 M670,276L818,276 M620,501L768,501"
+            android:strokeColor="#A9C8FF"
+            android:strokeWidth="50"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+    </group>
+</vector>
